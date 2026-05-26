@@ -48,7 +48,7 @@ Respond ONLY with valid JSON matching this schema:
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "OPENAI_API_KEY not configured" },
+      { error: "Service temporarily unavailable" },
       { status: 500 }
     );
   }
@@ -69,9 +69,8 @@ Respond ONLY with valid JSON matching this schema:
     });
 
     if (!response.ok) {
-      const err = await response.text();
       return NextResponse.json(
-        { error: `AI API error: ${response.status}` },
+        { error: "Failed to generate meal plan" },
         { status: 502 }
       );
     }
@@ -80,7 +79,7 @@ Respond ONLY with valid JSON matching this schema:
     const content = data.choices?.[0]?.message?.content;
     if (!content) {
       return NextResponse.json(
-        { error: "Empty response from AI" },
+        { error: "Failed to generate meal plan" },
         { status: 502 }
       );
     }

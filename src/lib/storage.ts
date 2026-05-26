@@ -29,6 +29,14 @@ const DEFAULT_SETTINGS: UserSettings = {
   disallowList: [],
 };
 
+function syncToServer(path: string, data: unknown) {
+  fetch(path, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }).catch(() => {});
+}
+
 export function useSettings() {
   const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
   const [loaded, setLoaded] = useState(false);
@@ -41,6 +49,7 @@ export function useSettings() {
   const updateSettings = useCallback((next: UserSettings) => {
     setSettings(next);
     setItem(KEYS.settings, next);
+    syncToServer("/api/user/settings", next);
   }, []);
 
   return { settings, updateSettings, loaded };
@@ -60,6 +69,7 @@ export function useSupplies() {
   const updateSupplies = useCallback((next: Supplies) => {
     setSupplies(next);
     setItem(KEYS.supplies, next);
+    syncToServer("/api/user/supplies", next);
   }, []);
 
   const toggleSupply = useCallback(
@@ -67,6 +77,7 @@ export function useSupplies() {
       const next = { ...supplies, [category]: !supplies[category] };
       setSupplies(next);
       setItem(KEYS.supplies, next);
+      syncToServer("/api/user/supplies", next);
     },
     [supplies]
   );

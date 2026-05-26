@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSettings, useSupplies, useDailyPlan } from "@/lib/storage";
 import type { GenerateMealsResponse, MealSet, Snack } from "@/types";
 
@@ -13,8 +13,32 @@ export default function PlanPage() {
   const [snacks, setSnacks] = useState<Snack[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [serverChecked, setServerChecked] = useState(false);
 
   const loaded = settingsLoaded && suppliesLoaded && planLoaded;
+
+  // Try fetching pre-generated plan from server on mount
+  useEffect(() => {
+    if (!loaded || plan || serverChecked) return;
+
+    const stocked = Object.entries(supplies).filter(([, v]) => v);
+    if (stocked.length === 0) {
+      setServerChecked(true);
+      return;
+    }
+
+    fetch("/api/plan/today")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: (GenerateMealsResponse & { pregenerated: boolean }) | null) => {
+        if (data?.mealSets?.length) {
+          setMealSets(data.mealSets);
+          setSnacks(data.snacks ?? []);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setServerChecked(true));
+  }, [loaded, plan, serverChecked, supplies]);
+
   if (!loaded) return null;
 
   const stocked = Object.entries(supplies).filter(([, v]) => v);
@@ -50,7 +74,6 @@ export default function PlanPage() {
     const today = new Date().toISOString().split("T")[0];
     savePlan({ date: today, chosenSetId: set.id, mealSet: set });
 
-    // Reduce supplies based on ingredients used
     const usedIngredients = [
       ...set.breakfast.ingredients,
       ...set.lunch.ingredients,
@@ -69,7 +92,6 @@ export default function PlanPage() {
     setMealSets([]);
   };
 
-  // Already have a plan for today
   if (plan) {
     return (
       <div className="mx-auto max-w-lg space-y-6 p-6">
@@ -93,7 +115,6 @@ export default function PlanPage() {
     );
   }
 
-  // Show generated options or generate button
   return (
     <div className="mx-auto max-w-lg space-y-6 p-6">
       <h1 className="text-2xl font-bold">Plan Your Day</h1>
@@ -106,6 +127,8 @@ export default function PlanPage() {
           </a>
           .
         </p>
+      ) : !serverChecked ? (
+        <p className="text-sm text-zinc-500">Loading your plan...</p>
       ) : mealSets.length === 0 ? (
         <div className="space-y-3">
           <p className="text-sm text-zinc-500">
