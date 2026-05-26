@@ -7,10 +7,14 @@ export async function sendMagicLinkEmail(email: string, token: string): Promise<
   const magicLink = `${baseUrl}/api/auth/verify?token=${token}`;
   const from = process.env.EMAIL_FROM || "onboarding@resend.dev";
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to: email,
     subject: "Your login link for Fridge Explorer",
     text: `Click this link to sign in:\n\n${magicLink}\n\nThis link expires in 15 minutes.`,
   });
+
+  if (error) {
+    throw new Error(`Failed to send email: ${error.message}`);
+  }
 }

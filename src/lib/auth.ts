@@ -28,11 +28,11 @@ export async function storeMagicToken(email: string, token: string): Promise<voi
 }
 
 export async function verifyMagicToken(token: string): Promise<string | null> {
-  const email = await redis.get<string>(`magic:${token}`);
+  const key = `magic:${token}`;
+  // Atomic get-and-delete to prevent TOCTOU race
+  const email = await redis.getdel<string>(key);
   if (!email) return null;
 
-  // Single-use: delete both keys
-  await redis.del(`magic:${token}`);
   await redis.del(`magic-email:${email}`);
 
   return email;
