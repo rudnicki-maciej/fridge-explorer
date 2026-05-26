@@ -1,24 +1,48 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import crypto from "crypto";
+import { redis } from "@/lib/kv";
 
 const SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-change-in-production"
 );
 const COOKIE_NAME = "fridge-session";
+const SESSION_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+const MAGIC_TOKEN_TTL = 60 * 15; // 15 minutes
 
-export function generateUserCode(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no ambiguous chars
-  let code = "";
-  for (let i = 0; i < 6; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return code;
+export function generateMagicToken(): string {
+  return crypto.randomBytes(32).toString("hex");
 }
 
-export async function createSessionToken(userId: string): Promise<string> {
-  return new SignJWT({ userId })
+export async function storeMagicToken(email: string, token: string): Promise<void> {
+  // Invalidate any previous token for this email
+  const previousToken = await redis.get<string>(`magic-email:${email}`);
+  if (previousToken) {
+    await redis.del(`magic:${previousToken}`);
+  }
+
+  // Store new token → email mapping with TTL
+  await redis.set(`magic:${token}`, email, { ex: MAGIC_TOKEN_TTL });
+  // Store email → token mapping for invalidation
+  await redis.set(`magic-email:${email}`, token, { ex: MAGIC_TOKEN_TTL });
+}
+
+export async function verifyMagicToken(token: string): Promise<string | null> {
+  const email = await redis.get<string>(`magic:${token}`);
+  if (!email) return null;
+
+  // Single-use: delete both keys
+  await redis.del(`magic:${token}`);
+  await redis.del(`magic-email:${email}`);
+
+  return email;
+}
+
+export async function createSessionToken(email: string): Promise<string> {
+  return new SignJWT({ email })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
+    .setExpirationTime(`${SESSION_MAX_AGE}s`)
     .sign(SECRET);
 }
 
@@ -28,7 +52,7 @@ export async function verifySession(): Promise<string | null> {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, SECRET);
-    return (payload.userId as string) ?? null;
+    return (payload.email as string) ?? null;
   } catch {
     return null;
   }
@@ -41,6 +65,6 @@ export async function setSessionCookie(token: string) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 365, // 1 year
+    maxAge: SESSION_MAX_AGE,
   });
 }
