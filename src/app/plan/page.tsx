@@ -23,7 +23,8 @@ export default function PlanPage() {
 
     const stocked = Object.entries(supplies).filter(([, v]) => v);
     if (stocked.length === 0) {
-      setServerChecked(true);
+      // Use a microtask to avoid synchronous setState in effect body
+      queueMicrotask(() => setServerChecked(true));
       return;
     }
 

@@ -109,7 +109,7 @@ Respond ONLY with valid JSON matching this schema:
     }).catch(() => {});
 
     return NextResponse.json(parsed);
-  } catch (e) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to generate meal plan" },
       { status: 500 }

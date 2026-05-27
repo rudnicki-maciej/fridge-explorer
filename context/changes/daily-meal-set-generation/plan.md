@@ -219,25 +219,25 @@ Verify the full generation flow works correctly with hydrated data. No code chan
 
 #### Automated
 
-- [x] 2.1 TypeScript compiles: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 TypeScript compiles: `npm run build` — ff47760
+- [x] 2.2 Lint passes: `npm run lint` — ff47760
 
 #### Manual
 
-- [x] 2.3 Fresh browser loads settings/supplies from server
-- [x] 2.4 Cross-device sync works on refresh
-- [x] 2.5 App works from localStorage when server unreachable
+- [x] 2.3 Fresh browser loads settings/supplies from server — ff47760
+- [x] 2.4 Cross-device sync works on refresh — ff47760
+- [x] 2.5 App works from localStorage when server unreachable — ff47760
 
 ### Phase 3: End-to-End Verification
 
 #### Automated
 
-- [ ] 3.1 TypeScript compiles: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Full loop: settings → supplies → generate → pick → supplies reduced
-- [ ] 3.4 Disallow-list respected in generation
-- [ ] 3.5 Multi-device sync confirmed
-- [ ] 3.6 Pre-generated plan loads instantly
+- [x] 3.3 Full loop: settings → supplies → generate → pick → supplies reduced
+- [x] 3.4 Disallow-list respected in generation
+- [x] 3.5 Multi-device sync confirmed
+- [x] 3.6 Pre-generated plan loads instantly

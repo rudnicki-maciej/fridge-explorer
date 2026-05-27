@@ -1,7 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
 import type { UserSettings, Supplies, DailyPlan } from "@/types";
+
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+function useMounted() {
+  return useSyncExternalStore(emptySubscribe, getClientSnapshot, getServerSnapshot);
+}
 
 function getItem<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -38,13 +46,13 @@ function syncToServer(path: string, data: unknown) {
 }
 
 export function useSettings() {
-  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
-  const [loaded, setLoaded] = useState(false);
+  const [settings, setSettings] = useState<UserSettings>(() =>
+    getItem(KEYS.settings, DEFAULT_SETTINGS)
+  );
+  const mounted = useMounted();
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setSettings(getItem(KEYS.settings, DEFAULT_SETTINGS));
-    setLoaded(true);
-
     fetch("/api/user/settings")
       .then((res) => (res.ok ? res.json() : null))
       .then((data: UserSettings | null) => {
@@ -53,7 +61,8 @@ export function useSettings() {
           setItem(KEYS.settings, data);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setHydrated(true));
   }, []);
 
   const updateSettings = useCallback((next: UserSettings) => {
@@ -62,19 +71,21 @@ export function useSettings() {
     syncToServer("/api/user/settings", next);
   }, []);
 
+  const loaded = mounted && hydrated;
+
   return { settings, updateSettings, loaded };
 }
 
 const DEFAULT_SUPPLIES: Supplies = {};
 
 export function useSupplies() {
-  const [supplies, setSupplies] = useState<Supplies>(DEFAULT_SUPPLIES);
-  const [loaded, setLoaded] = useState(false);
+  const [supplies, setSupplies] = useState<Supplies>(() =>
+    getItem(KEYS.supplies, DEFAULT_SUPPLIES)
+  );
+  const mounted = useMounted();
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setSupplies(getItem(KEYS.supplies, DEFAULT_SUPPLIES));
-    setLoaded(true);
-
     fetch("/api/user/supplies")
       .then((res) => (res.ok ? res.json() : null))
       .then((data: Supplies | null) => {
@@ -83,7 +94,8 @@ export function useSupplies() {
           setItem(KEYS.supplies, data);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setHydrated(true));
   }, []);
 
   const updateSupplies = useCallback((next: Supplies) => {
@@ -102,21 +114,16 @@ export function useSupplies() {
     [supplies]
   );
 
-  return { supplies, updateSupplies, toggleSupply, loaded };
+  return { supplies, updateSupplies, toggleSupply, loaded: mounted && hydrated };
 }
 
 export function useDailyPlan() {
-  const [plan, setPlan] = useState<DailyPlan | null>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
+  const [plan, setPlan] = useState<DailyPlan | null>(() => {
     const stored = getItem<DailyPlan | null>(KEYS.dailyPlan, null);
     const today = new Date().toISOString().split("T")[0];
-    if (stored && stored.date === today) {
-      setPlan(stored);
-    }
-    setLoaded(true);
-  }, []);
+    return stored && stored.date === today ? stored : null;
+  });
+  const loaded = useMounted();
 
   const savePlan = useCallback((next: DailyPlan) => {
     setPlan(next);
