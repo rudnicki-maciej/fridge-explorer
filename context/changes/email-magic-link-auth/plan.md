@@ -353,13 +353,13 @@ Create a login page with email input, "check your email" confirmation state, and
 
 #### Automated
 
-- [x] 4.1 TypeScript compiles: `npm run build`
-- [x] 4.2 Lint passes: `npm run lint`
+- [x] 4.1 TypeScript compiles: `npm run build` — 01a4075
+- [x] 4.2 Lint passes: `npm run lint` — 01a4075
 
 #### Manual
 
-- [x] 4.3 Unauthenticated visit to /plan redirects to /login
-- [x] 4.4 Login page shows email input with info note
-- [x] 4.5 Full flow: email → link → authenticated on /plan
-- [x] 4.6 Expired link shows error message
-- [x] 4.7 Clearing cookie redirects to /login
+- [x] 4.3 Unauthenticated visit to /plan redirects to /login — 01a4075
+- [x] 4.4 Login page shows email input with info note — 01a4075
+- [x] 4.5 Full flow: email → link → authenticated on /plan — 01a4075
+- [x] 4.6 Expired link shows error message — 01a4075
+- [x] 4.7 Clearing cookie redirects to /login — 01a4075
