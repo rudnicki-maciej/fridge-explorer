@@ -25,23 +25,23 @@ const DEFAULT_USER_DATA: UserData = {
   updatedAt: new Date().toISOString(),
 };
 
-function userKey(userId: string) {
-  return `user:${userId}`;
+function userKey(email: string) {
+  return `user:${email}`;
 }
 
-export async function getUser(userId: string): Promise<UserData | null> {
-  return redis.get<UserData>(userKey(userId));
+export async function getUser(email: string): Promise<UserData | null> {
+  return redis.get<UserData>(userKey(email));
 }
 
-export async function setUser(userId: string, data: UserData): Promise<void> {
-  await redis.set(userKey(userId), data);
+export async function setUser(email: string, data: UserData): Promise<void> {
+  await redis.set(userKey(email), data);
 }
 
-export async function createUser(userId: string): Promise<UserData> {
+export async function createUser(email: string): Promise<UserData> {
   const data: UserData = { ...DEFAULT_USER_DATA, updatedAt: new Date().toISOString() };
-  await redis.set(userKey(userId), data);
+  await redis.set(userKey(email), data);
   // Track user in a set for cron iteration
-  await redis.sadd("users", userId);
+  await redis.sadd("users", email);
   return data;
 }
 

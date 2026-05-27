@@ -327,22 +327,22 @@ Create a login page with email input, "check your email" confirmation state, and
 
 #### Automated
 
-- [x] 2.1 TypeScript compiles: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 TypeScript compiles: `npm run build` — 15ac0d7
+- [x] 2.2 Lint passes: `npm run lint` — 15ac0d7
 
 #### Manual
 
-- [x] 2.3 POST /api/auth/send returns ok and email arrives
-- [x] 2.4 Clicking magic link sets session and redirects to /plan
-- [x] 2.5 Same link fails on second click
-- [x] 2.6 New link request invalidates previous
+- [x] 2.3 POST /api/auth/send returns ok and email arrives — 15ac0d7
+- [x] 2.4 Clicking magic link sets session and redirects to /plan — 15ac0d7
+- [x] 2.5 Same link fails on second click — 15ac0d7
+- [x] 2.6 New link request invalidates previous — 15ac0d7
 
 ### Phase 3: User Identity Migration
 
 #### Automated
 
-- [ ] 3.1 TypeScript compiles: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
