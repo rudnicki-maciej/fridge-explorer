@@ -232,12 +232,12 @@ Verify the full generation flow works correctly with hydrated data. No code chan
 
 #### Automated
 
-- [x] 3.1 TypeScript compiles: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build` — 4216feb
+- [x] 3.2 Lint passes: `npm run lint` — 4216feb
 
 #### Manual
 
-- [x] 3.3 Full loop: settings → supplies → generate → pick → supplies reduced
-- [x] 3.4 Disallow-list respected in generation
-- [x] 3.5 Multi-device sync confirmed
-- [x] 3.6 Pre-generated plan loads instantly
+- [x] 3.3 Full loop: settings → supplies → generate → pick → supplies reduced — 4216feb
+- [x] 3.4 Disallow-list respected in generation — 4216feb
+- [x] 3.5 Multi-device sync confirmed — 4216feb
+- [x] 3.6 Pre-generated plan loads instantly — 4216feb
