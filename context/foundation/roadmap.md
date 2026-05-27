@@ -3,7 +3,7 @@ project: "# TODO: project — see Open Questions"
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -29,8 +29,8 @@ A hard-working professional needs a way to turn what's already in the fridge and
 
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 |---|---|---|---|---|---|
-| F-01 | email-magic-link-auth | (foundation) email magic-link auth replaces JWT scaffold; data tied to email identity | — | FR-012, FR-013, Access Control | proposed |
-| F-02 | basic-observability | (foundation) product metrics in place: confirmed user count, per-user request volume | F-01 | NFR-04 | proposed |
+| F-01 | email-magic-link-auth | (foundation) email magic-link auth replaces JWT scaffold; data tied to email identity | — | FR-012, FR-013, Access Control | done |
+| F-02 | basic-observability | (foundation) product metrics in place: confirmed user count, per-user request volume | F-01 | NFR-04 | ready |
 | S-01 | daily-meal-set-generation | user can see 2–3 coordinated full-day meal sets from available supplies and pick one | — | US-01, FR-006, FR-007, FR-008, FR-010, FR-011 | ready |
 | S-02 | setup-and-preferences | user can set calorie target and dietary disallow-list | — | FR-001, FR-002, FR-003 | ready |
 | S-03 | supply-management | user can add supplies via category checklists and see them reduced when a meal is picked | — | FR-004, FR-005 | ready |
@@ -72,7 +72,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Email delivery reliability on free-tier providers could cause friction during sign-in; sequenced as foundation because all data persistence depends on stable identity.
-- **Status:** proposed
+- **Status:** done
 
 ### F-02: Basic observability
 
@@ -85,7 +85,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Sequenced after F-01 because "confirmed email count" requires email auth to exist; low implementation risk given Vercel's built-in analytics or lightweight custom counters in Redis.
-- **Status:** proposed
+- **Status:** ready
 
 ## Slices
 
@@ -179,4 +179,6 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Precise macro/micronutrient tracking** — Why parked: PRD §Non-Goals; variety across food groups, not clinical analysis.
 
 ## Done
+
+- **F-01: Email magic-link auth** — Archived 2026-05-27 → `context/changes/email-magic-link-auth/`. Lesson: —.
 
