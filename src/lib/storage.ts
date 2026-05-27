@@ -44,6 +44,16 @@ export function useSettings() {
   useEffect(() => {
     setSettings(getItem(KEYS.settings, DEFAULT_SETTINGS));
     setLoaded(true);
+
+    fetch("/api/user/settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: UserSettings | null) => {
+        if (data) {
+          setSettings(data);
+          setItem(KEYS.settings, data);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const updateSettings = useCallback((next: UserSettings) => {
@@ -64,6 +74,16 @@ export function useSupplies() {
   useEffect(() => {
     setSupplies(getItem(KEYS.supplies, DEFAULT_SUPPLIES));
     setLoaded(true);
+
+    fetch("/api/user/supplies")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: Supplies | null) => {
+        if (data) {
+          setSupplies(data);
+          setItem(KEYS.supplies, data);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const updateSupplies = useCallback((next: Supplies) => {

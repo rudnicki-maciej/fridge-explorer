@@ -207,26 +207,26 @@ Verify the full generation flow works correctly with hydrated data. No code chan
 
 #### Automated
 
-- [x] 1.1 TypeScript compiles: `npm run build`
-- [x] 1.2 Lint passes: `npm run lint`
+- [x] 1.1 TypeScript compiles: `npm run build` — 9fbff89
+- [x] 1.2 Lint passes: `npm run lint` — 9fbff89
 
 #### Manual
 
-- [x] 1.3 GET /api/user/settings returns user data
-- [x] 1.4 GET /api/user/supplies returns user data
+- [x] 1.3 GET /api/user/settings returns user data — 9fbff89
+- [x] 1.4 GET /api/user/supplies returns user data — 9fbff89
 
 ### Phase 2: Client Hydration Hooks
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 TypeScript compiles: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Fresh browser loads settings/supplies from server
-- [ ] 2.4 Cross-device sync works on refresh
-- [ ] 2.5 App works from localStorage when server unreachable
+- [x] 2.3 Fresh browser loads settings/supplies from server
+- [x] 2.4 Cross-device sync works on refresh
+- [x] 2.5 App works from localStorage when server unreachable
 
 ### Phase 3: End-to-End Verification
 
