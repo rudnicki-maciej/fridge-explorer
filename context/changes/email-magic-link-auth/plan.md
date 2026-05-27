@@ -341,25 +341,25 @@ Create a login page with email input, "check your email" confirmation state, and
 
 #### Automated
 
-- [x] 3.1 TypeScript compiles: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build` — d173b18
+- [x] 3.2 Lint passes: `npm run lint` — d173b18
 
 #### Manual
 
-- [ ] 3.3 Authenticated PUT /api/user/settings works
-- [ ] 3.4 Redis shows user:{email} keys
+- [x] 3.3 Authenticated PUT /api/user/settings works — d173b18
+- [x] 3.4 Redis shows user:{email} keys — d173b18
 
 ### Phase 4: Login UI
 
 #### Automated
 
-- [ ] 4.1 TypeScript compiles: `npm run build`
-- [ ] 4.2 Lint passes: `npm run lint`
+- [x] 4.1 TypeScript compiles: `npm run build`
+- [x] 4.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.3 Unauthenticated visit to /plan redirects to /login
-- [ ] 4.4 Login page shows email input with info note
-- [ ] 4.5 Full flow: email → link → authenticated on /plan
-- [ ] 4.6 Expired link shows error message
-- [ ] 4.7 Clearing cookie redirects to /login
+- [x] 4.3 Unauthenticated visit to /plan redirects to /login
+- [x] 4.4 Login page shows email input with info note
+- [x] 4.5 Full flow: email → link → authenticated on /plan
+- [x] 4.6 Expired link shows error message
+- [x] 4.7 Clearing cookie redirects to /login
