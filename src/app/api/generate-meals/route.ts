@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
-import type { GenerateMealsRequest, GenerateMealsResponse, MealSet, Snack } from "@/types";
+import type { GenerateMealsRequest, GenerateMealsResponse } from "@/types";
+import { verifySession } from "@/lib/auth";
+import { recordGeneration } from "@/lib/metrics";
 
 export async function POST(request: Request) {
+  const email = await verifySession();
+  if (!email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = (await request.json()) as GenerateMealsRequest;
   const { supplies, dailyCalorieTarget, disallowList } = body;
 
@@ -54,6 +61,7 @@ Respond ONLY with valid JSON matching this schema:
   }
 
   try {
+    const start = Date.now();
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -76,6 +84,7 @@ Respond ONLY with valid JSON matching this schema:
     }
 
     const data = await response.json();
+    const latencyMs = Date.now() - start;
     const content = data.choices?.[0]?.message?.content;
     if (!content) {
       return NextResponse.json(
@@ -93,6 +102,11 @@ Respond ONLY with valid JSON matching this schema:
         { status: 502 }
       );
     }
+
+    recordGeneration(email, latencyMs, {
+      prompt: data.usage?.prompt_tokens ?? 0,
+      completion: data.usage?.completion_tokens ?? 0,
+    }).catch(() => {});
 
     return NextResponse.json(parsed);
   } catch (e) {

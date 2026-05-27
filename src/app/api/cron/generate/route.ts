@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       continue;
     }
 
-    const result = await generateMealPlan(user.settings, user.supplies);
+    const result = await generateMealPlan(user.settings, user.supplies, userId);
     if (result) {
       user.pregenerated = { date: targetDate, inputHash: hash, ...result };
       await setUser(userId, user);

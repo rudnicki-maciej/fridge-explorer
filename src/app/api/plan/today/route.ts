@@ -31,7 +31,7 @@ export async function GET() {
   }
 
   // Fallback: generate on-demand
-  const result = await generateMealPlan(user.settings, user.supplies);
+  const result = await generateMealPlan(user.settings, user.supplies, userId);
   if (!result) {
     return NextResponse.json({ error: "Failed to generate plan" }, { status: 502 });
   }

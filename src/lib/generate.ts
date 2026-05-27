@@ -1,4 +1,5 @@
 import type { UserSettings, Supplies, MealSet, Snack } from "@/types";
+import { recordGeneration } from "@/lib/metrics";
 
 export function computeInputHash(settings: UserSettings, supplies: Supplies): string {
   const input = JSON.stringify({ settings, supplies });
@@ -13,7 +14,8 @@ export function computeInputHash(settings: UserSettings, supplies: Supplies): st
 
 export async function generateMealPlan(
   settings: UserSettings,
-  supplies: Supplies
+  supplies: Supplies,
+  email?: string,
 ): Promise<{ mealSets: MealSet[]; snacks: Snack[] } | null> {
   const stocked = Object.entries(supplies)
     .filter(([, v]) => v)
@@ -54,6 +56,7 @@ Respond ONLY with valid JSON matching this schema:
   if (!apiKey) return null;
 
   try {
+    const start = Date.now();
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -71,11 +74,19 @@ Respond ONLY with valid JSON matching this schema:
     if (!response.ok) return null;
 
     const data = await response.json();
+    const latencyMs = Date.now() - start;
     const content = data.choices?.[0]?.message?.content;
     if (!content) return null;
 
     const parsed = JSON.parse(content) as { mealSets: MealSet[]; snacks: Snack[] };
     if (!parsed.mealSets?.length) return null;
+
+    if (email) {
+      recordGeneration(email, latencyMs, {
+        prompt: data.usage?.prompt_tokens ?? 0,
+        completion: data.usage?.completion_tokens ?? 0,
+      }).catch(() => {});
+    }
 
     return parsed;
   } catch {

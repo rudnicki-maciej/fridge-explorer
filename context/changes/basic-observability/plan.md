@@ -215,20 +215,20 @@ Create a protected API route that reads and returns the metrics snapshot as JSON
 
 #### Automated
 
-- [x] 1.1 TypeScript compiles: `npm run build`
-- [x] 1.2 Lint passes: `npm run lint`
+- [x] 1.1 TypeScript compiles: `npm run build` — 1dce411
+- [x] 1.2 Lint passes: `npm run lint` — 1dce411
 
 ### Phase 2: Instrument Generation Paths
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 TypeScript compiles: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Generation creates metrics:gen key in Redis
-- [ ] 2.4 Token usage recorded in metrics:tokens hash
+- [x] 2.3 Generation creates metrics:gen key in Redis
+- [x] 2.4 Token usage recorded in metrics:tokens hash
 
 ### Phase 3: Admin Metrics Endpoint
 
