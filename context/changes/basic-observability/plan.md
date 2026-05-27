@@ -234,11 +234,11 @@ Create a protected API route that reads and returns the metrics snapshot as JSON
 
 #### Automated
 
-- [x] 3.1 TypeScript compiles: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build` — 93586fd
+- [x] 3.2 Lint passes: `npm run lint` — 93586fd
 
 #### Manual
 
-- [x] 3.3 Curl with token returns JSON metrics snapshot
-- [x] 3.4 Request without token returns 401
-- [x] 3.5 Metrics update after generating a meal plan
+- [x] 3.3 Curl with token returns JSON metrics snapshot — 93586fd
+- [x] 3.4 Request without token returns 401 — 93586fd
+- [x] 3.5 Metrics update after generating a meal plan — 93586fd

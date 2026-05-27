@@ -1,7 +1,7 @@
 ---
 change_id: basic-observability
 title: Basic product observability — user count, generation metrics, token usage
-status: implementing
+status: implemented
 created: 2026-05-27
 updated: 2026-05-27
 archived_at: null
