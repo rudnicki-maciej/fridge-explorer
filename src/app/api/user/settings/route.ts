@@ -23,13 +23,34 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const settings = (await request.json()) as UserSettings;
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const settings = body as Record<string, unknown>;
+  if (
+    typeof settings?.dailyCalorieTarget !== "number" ||
+    settings.dailyCalorieTarget <= 0 ||
+    !Array.isArray(settings.disallowList) ||
+    !settings.disallowList.every((item: unknown) => typeof item === "string")
+  ) {
+    return NextResponse.json({ error: "Invalid settings" }, { status: 400 });
+  }
+
+  const validated: UserSettings = {
+    dailyCalorieTarget: settings.dailyCalorieTarget,
+    disallowList: settings.disallowList as string[],
+  };
+
   const user = await getUser(email);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  user.settings = settings;
+  user.settings = validated;
   user.updatedAt = new Date().toISOString();
   await setUser(email, user);
 

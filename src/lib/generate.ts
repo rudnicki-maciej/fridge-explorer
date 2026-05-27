@@ -23,13 +23,17 @@ export async function generateMealPlan(
 
   if (stocked.length === 0) return null;
 
+  const sanitizedDisallow = settings.disallowList
+    .map((s) => s.replace(/[\n\r]/g, " ").trim().slice(0, 50))
+    .filter((s) => s.length > 0);
+
   const mainCalories = settings.dailyCalorieTarget - 400;
 
   const prompt = `You are a meal planning assistant. Generate exactly 3 coordinated full-day meal sets.
 
 CONSTRAINTS:
 - Available food categories: ${stocked.join(", ")}
-- NEVER include these foods: ${settings.disallowList.length > 0 ? settings.disallowList.join(", ") : "none"}
+- NEVER include these foods: ${sanitizedDisallow.length > 0 ? sanitizedDisallow.join(", ") : "none"}
 - Each meal set must total approximately ${mainCalories} kcal across breakfast + lunch + dinner
 - Maximize variety across food groups between the 3 meals in each set
 - Only use ingredients from the available categories
