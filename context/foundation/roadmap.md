@@ -30,10 +30,10 @@ A hard-working professional needs a way to turn what's already in the fridge and
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 |---|---|---|---|---|---|
 | F-01 | email-magic-link-auth | (foundation) email magic-link auth replaces JWT scaffold; data tied to email identity | — | FR-012, FR-013, Access Control | done |
-| F-02 | basic-observability | (foundation) product metrics in place: confirmed user count, per-user request volume | F-01 | NFR-04 | ready |
+| F-02 | basic-observability | (foundation) product metrics in place: confirmed user count, per-user request volume | F-01 | NFR-04 | done |
 | S-01 | daily-meal-set-generation | user can see 2–3 coordinated full-day meal sets from available supplies and pick one | — | US-01, FR-006, FR-007, FR-008, FR-010, FR-011 | ready |
 | S-02 | setup-and-preferences | user can set calorie target and dietary disallow-list | — | FR-001, FR-002, FR-003 | ready |
-| S-03 | supply-management | user can add supplies via category checklists and see them reduced when a meal is picked | — | FR-004, FR-005 | ready |
+| S-03 | supply-management | user can add supplies via category checklists or natural language text and see them reduced when a meal is picked | — | FR-004, FR-005, FR-012 | ready |
 | S-04 | plan-management | user can re-pick from generated options without regeneration, or explicitly regenerate | S-01 | FR-014, FR-015 | proposed |
 | S-05 | snack-lookup | user can view available snack options from current supplies at any time | S-03 | FR-009, FR-011 | proposed |
 
@@ -85,7 +85,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Sequenced after F-01 because "confirmed email count" requires email auth to exist; low implementation risk given Vercel's built-in analytics or lightweight custom counters in Redis.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -115,9 +115,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ### S-03: Supply management
 
-- **Outcome:** user can add supplies via category-based checklists (minimal typing) and see supplies reduced when a meal is picked.
+- **Outcome:** user can add supplies via category-based checklists or natural language text input (minimal typing) and see supplies reduced when a meal is picked.
 - **Change ID:** supply-management
-- **PRD refs:** FR-004, FR-005
+- **PRD refs:** FR-004, FR-005, FR-012
 - **Prerequisites:** —
 - **Parallel with:** S-01, S-02, F-01
 - **Blockers:** —
@@ -173,6 +173,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Category-level shopping guidance** — Why parked: PRD §Non-Goals + Open Question #2; decide after MVP core loop is validated.
 - **Resupply nudges based on quantity tracking** — Why parked: depends on resolving Open Question #4 (approximate tracking mechanism); nice-to-have, not must-have for MVP.
 - **Barcode scanning / AI photo recognition for supply input** — Why parked: PRD Open Question #5; post-MVP exploration after manual checklists are validated.
+- **Voice dictation for supply input** — Why parked: PRD Open Question #5; progressive enhancement over text-based natural language input (FR-012). Web Speech API has browser compat limits (Chrome/Edge only) and food-name transcription accuracy risks. Add as mic button feeding same LLM parsing pipeline once text input is validated.
 - **Multi-user / family meal coordination** — Why parked: PRD §Non-Goals; MVP is single user only.
 - **Custom recipe database** — Why parked: PRD §Non-Goals; recipes come from curated/external source.
 - **Offline-first capability** — Why parked: PRD §Non-Goals; requires internet connection.
@@ -181,4 +182,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Done
 
 - **F-01: Email magic-link auth** — Archived 2026-05-27 → `context/changes/email-magic-link-auth/`. Lesson: —.
+- **F-02: Basic observability** — Archived 2026-05-27 → `context/changes/basic-observability/`. Lesson: —.
 

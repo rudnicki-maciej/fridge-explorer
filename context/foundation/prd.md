@@ -68,6 +68,8 @@ Existing tools go "plan → specific shopping list → cook". This app reverses 
   > Socrates: Counter-argument considered: "category-level tracking without quantities means the app can't know when you've run out — it might suggest chicken for 5 days straight." Resolution: kept; quantity tracking is a real gap but adds significant complexity. Accept imprecision for MVP.
 - FR-005: Picking a meal automatically reduces the corresponding supplies. Priority: must-have
   > Socrates: Counter-argument considered: "without quantity tracking, 'reducing supplies' is meaningless — how do you subtract from 'got vegetables'?" Resolution: kept; same tension as FR-004. Accept approximate tracking for MVP.
+- FR-012: User can add supplies by typing a natural language description (e.g., "chicken breast, brown rice, broccoli, Greek yogurt") — LLM parses the text into the category structure. Priority: must-have
+  > Complements FR-004 category checklists with a faster free-text input path. The same LLM already used for meal generation normalizes unstructured text into known supply categories.
 
 ### Daily Meal Planning
 - FR-006: User can view 2–3 breakfast options based on available supplies and preferences. Priority: must-have
@@ -118,4 +120,5 @@ Multi-device sync with minimal auth. Single user accessing the same data across 
 1. **Project name?** — TBD by user. The project has no name yet.
 2. **Should the app provide category-level shopping guidance or a disallow-list?** — Parked. Decide after MVP core loop ("fridge → daily plan") is validated. Could be v2.
 3. **Resupply nudge: should the app flag when a suggested meal requires items not in current supplies?** — Nice-to-have. No specific quantity tracking in MVP, but could warn based on category-level inventory.
-4. **How does approximate inventory tracking work without quantities?** — FR-004 and FR-005 accept imprecision for MVP. The mechanism for "reducing supplies" at category level needs design during implementation.
+4. **How does approximate inventory tracking work without quantities?** — Resolved: supplies are tracked at item level (not quantity). Users add items via natural language text (FR-012) or category checklists (FR-004). "Reducing supplies" (FR-005) means toggling items off when consumed. Imprecision accepted for MVP — the LLM generation already handles approximate availability gracefully.
+5. **Should supply input support voice dictation?** — Parked for post-MVP. Voice (Web Speech API → same LLM parsing pipeline as FR-012) is a progressive enhancement once text-based natural language input is validated. Risks: browser compatibility (Chrome/Edge only), microphone permissions friction, food-name transcription accuracy for non-English items.
