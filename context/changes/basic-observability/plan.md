@@ -222,23 +222,23 @@ Create a protected API route that reads and returns the metrics snapshot as JSON
 
 #### Automated
 
-- [x] 2.1 TypeScript compiles: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 TypeScript compiles: `npm run build` — aa6bf28
+- [x] 2.2 Lint passes: `npm run lint` — aa6bf28
 
 #### Manual
 
-- [x] 2.3 Generation creates metrics:gen key in Redis
-- [x] 2.4 Token usage recorded in metrics:tokens hash
+- [x] 2.3 Generation creates metrics:gen key in Redis — aa6bf28
+- [x] 2.4 Token usage recorded in metrics:tokens hash — aa6bf28
 
 ### Phase 3: Admin Metrics Endpoint
 
 #### Automated
 
-- [ ] 3.1 TypeScript compiles: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Curl with token returns JSON metrics snapshot
-- [ ] 3.4 Request without token returns 401
-- [ ] 3.5 Metrics update after generating a meal plan
+- [x] 3.3 Curl with token returns JSON metrics snapshot
+- [x] 3.4 Request without token returns 401
+- [x] 3.5 Metrics update after generating a meal plan
