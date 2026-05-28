@@ -427,26 +427,26 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [x] 2.1 PUT with old boolean format returns 400
-- [x] 2.2 PUT with valid new format returns 200
-- [x] 2.3 POST /api/user/supplies/parse with valid text returns parsed items
-- [x] 2.4 POST with empty text returns 400
-- [x] 2.5 TypeScript compiles
-- [x] 2.6 Lint passes
+- [x] 2.1 PUT with old boolean format returns 400 — b285fba
+- [x] 2.2 PUT with valid new format returns 200 — b285fba
+- [x] 2.3 POST /api/user/supplies/parse with valid text returns parsed items — b285fba
+- [x] 2.4 POST with empty text returns 400 — b285fba
+- [x] 2.5 TypeScript compiles — b285fba
+- [x] 2.6 Lint passes — b285fba
 
 #### Manual
 
-- [x] 2.7 PUT edge cases: amount=0, negative, invalid unit, long item name
-- [x] 2.8 Parse endpoint with various natural language inputs
+- [x] 2.7 PUT edge cases: amount=0, negative, invalid unit, long item name — b285fba
+- [x] 2.8 Parse endpoint with various natural language inputs — b285fba
 
 ### Phase 3: LLM Integration
 
 #### Automated
 
-- [ ] 3.1 parseSuppliesText returns structured array
-- [ ] 3.2 generateMealPlan with new supplies returns structured ingredients
-- [ ] 3.3 TypeScript compiles
-- [ ] 3.4 Lint passes
+- [x] 3.1 parseSuppliesText returns structured array
+- [x] 3.2 generateMealPlan with new supplies returns structured ingredients
+- [x] 3.3 TypeScript compiles
+- [x] 3.4 Lint passes
 
 #### Manual
 
