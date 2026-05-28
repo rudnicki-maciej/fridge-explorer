@@ -1,37 +1,30 @@
-export const SUPPLY_CATEGORIES = [
-  "meat",
-  "fish",
-  "dairy",
-  "eggs",
-  "grains",
-  "bread",
-  "pasta",
-  "rice",
-  "vegetables",
-  "fruits",
-  "legumes",
-  "nuts",
-  "oils",
-  "spices",
-  "sauces",
-] as const;
+export type SupplyUnit = "g" | "ml" | "items";
 
-export type SupplyCategory = (typeof SUPPLY_CATEGORIES)[number];
+export interface SupplyItem {
+  amount: number;
+  unit: SupplyUnit;
+}
+
+export interface Supplies {
+  [itemName: string]: SupplyItem;
+}
+
+export interface Ingredient {
+  name: string;
+  amount: number;
+  unit: SupplyUnit;
+}
 
 export interface UserSettings {
   dailyCalorieTarget: number;
   disallowList: string[];
 }
 
-export interface Supplies {
-  [category: string]: boolean;
-}
-
 export interface Meal {
   name: string;
   description: string;
   calories: number;
-  ingredients: string[];
+  ingredients: Ingredient[];
   category: "breakfast" | "lunch" | "dinner" | "snack";
 }
 
@@ -53,7 +46,7 @@ export interface Snack {
   name: string;
   description: string;
   calories: number;
-  ingredients: string[];
+  ingredients: Ingredient[];
 }
 
 export interface GenerateMealsRequest {

@@ -416,12 +416,12 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [ ] 1.1 TypeScript compiles with no errors in src/types.ts
-- [ ] 1.2 No remaining references to SUPPLY_CATEGORIES or SupplyCategory in types.ts
+- [x] 1.1 TypeScript compiles with no errors in src/types.ts
+- [x] 1.2 No remaining references to SUPPLY_CATEGORIES or SupplyCategory in types.ts
 
 #### Manual
 
-- [ ] 1.3 Type definitions are clean and minimal
+- [x] 1.3 Type definitions are clean and minimal
 
 ### Phase 2: API Layer & Validation
 
