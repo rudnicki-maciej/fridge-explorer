@@ -3,7 +3,7 @@ project: "# TODO: project — see Open Questions"
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-27
+updated: 2026-05-28
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -31,7 +31,7 @@ A hard-working professional needs a way to turn what's already in the fridge and
 |---|---|---|---|---|---|
 | F-01 | email-magic-link-auth | (foundation) email magic-link auth replaces JWT scaffold; data tied to email identity | — | FR-012, FR-013, Access Control | done |
 | F-02 | basic-observability | (foundation) product metrics in place: confirmed user count, per-user request volume | F-01 | NFR-04 | done |
-| S-01 | daily-meal-set-generation | user can see 2–3 coordinated full-day meal sets from available supplies and pick one | — | US-01, FR-006, FR-007, FR-008, FR-010, FR-011 | ready |
+| S-01 | daily-meal-set-generation | user can see 2–3 coordinated full-day meal sets from available supplies and pick one | — | US-01, FR-006, FR-007, FR-008, FR-010, FR-011 | done |
 | S-02 | setup-and-preferences | user can set calorie target and dietary disallow-list | — | FR-001, FR-002, FR-003 | ready |
 | S-03 | supply-management | user can add supplies via category checklists or natural language text and see them reduced when a meal is picked | — | FR-004, FR-005, FR-012 | ready |
 | S-04 | plan-management | user can re-pick from generated options without regeneration, or explicitly regenerate | S-01 | FR-014, FR-015 | proposed |
@@ -99,7 +99,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** This is the north star — the riskiest slice because it exercises the AI generation logic end-to-end. Sequenced first because market-feedback goal demands validating the core hypothesis before investing in surrounding features. The existing `/api/generate-meals` route provides a starting point.
-- **Status:** ready
+- **Status:** done
 
 ### S-02: Setup and preferences
 
@@ -183,4 +183,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 - **F-01: Email magic-link auth** — Archived 2026-05-27 → `context/changes/email-magic-link-auth/`. Lesson: —.
 - **F-02: Basic observability** — Archived 2026-05-27 → `context/changes/basic-observability/`. Lesson: —.
+- **S-01: Full-day meal set generation** — Archived 2026-05-28 → `context/archive/2026-05-27-daily-meal-set-generation/`. Lesson: —.
 
