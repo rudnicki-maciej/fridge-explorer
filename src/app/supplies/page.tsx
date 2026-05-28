@@ -31,7 +31,7 @@ export default function SuppliesPage() {
       const res = await fetch("/api/user/supplies/parse", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, existingItems: Object.keys(supplies) }),
       });
       if (!res.ok) {
         const data = await res.json();

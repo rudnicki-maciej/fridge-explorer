@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const user = await getUser(userId);
     if (!user) continue;
 
-    const stocked = Object.values(user.supplies).some((v) => v);
+    const stocked = Object.keys(user.supplies).length > 0;
     if (!stocked) {
       skipped++;
       continue;

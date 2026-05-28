@@ -450,9 +450,9 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Manual
 
-- [ ] 3.5 LLM respects exact item names in recipes
-- [ ] 3.6 LLM handles edge cases (no unit, large quantities)
-- [ ] 3.7 Sanitization strips injection attempts
+- [x] 3.5 LLM respects exact item names in recipes
+- [x] 3.6 LLM handles edge cases (no unit, large quantities)
+- [x] 3.7 Sanitization strips injection attempts
 
 ### Phase 4: Client Hooks & State
 
@@ -466,36 +466,36 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Manual
 
-- [ ] 4.6 Optimistic updates feel instant
-- [ ] 4.7 Server sync works on refresh
+- [x] 4.6 Optimistic updates feel instant
+- [x] 4.7 Server sync works on refresh
 
 ### Phase 5: Supplies Page UI
 
 #### Automated
 
-- [x] 5.1 TypeScript compiles
-- [x] 5.2 Lint passes
-- [x] 5.3 No references to SUPPLY_CATEGORIES or toggleSupply remain
+- [x] 5.1 TypeScript compiles — 26d3658
+- [x] 5.2 Lint passes — 26d3658
+- [x] 5.3 No references to SUPPLY_CATEGORIES or toggleSupply remain — 26d3658
 
 #### Manual
 
-- [ ] 5.4 NL input → parse → confirm → items appear
-- [ ] 5.5 Edit amount inline
-- [ ] 5.6 Delete item
-- [ ] 5.7 Refresh persists data
-- [ ] 5.8 Empty state shows prompt
+- [x] 5.4 NL input → parse → confirm → items appear — 26d3658
+- [x] 5.5 Edit amount inline — 26d3658
+- [x] 5.6 Delete item — 26d3658
+- [x] 5.7 Refresh persists data — 26d3658
+- [x] 5.8 Empty state shows prompt — 26d3658
 
 ### Phase 6: Plan Page & Cron Updates
 
 #### Automated
 
-- [ ] 6.1 TypeScript compiles
-- [ ] 6.2 Lint passes
-- [ ] 6.3 Build succeeds
-- [ ] 6.4 No remaining boolean supply patterns in codebase
+- [x] 6.1 TypeScript compiles
+- [x] 6.2 Lint passes
+- [x] 6.3 Build succeeds
+- [x] 6.4 No remaining boolean supply patterns in codebase
 
 #### Manual
 
-- [ ] 6.5 Full flow: add → generate → pick → deduction correct
-- [ ] 6.6 Cron works with new format
-- [ ] 6.7 Empty supplies shows appropriate message
+- [x] 6.5 Full flow: add → generate → pick → deduction correct
+- [x] 6.6 Cron works with new format
+- [x] 6.7 Empty supplies shows appropriate message

@@ -22,25 +22,33 @@ function formatSupplies(supplies: Supplies): string {
     .join(", ");
 }
 
-const VALID_UNITS: SupplyUnit[] = ["g", "ml", "items"];
+function normalizeUnit(unit: unknown): SupplyUnit | null {
+  if (typeof unit !== "string") return null;
+  const u = unit.toLowerCase().trim();
+  if (u === "g" || u === "grams" || u === "gram") return "g";
+  if (u === "ml" || u === "milliliters" || u === "millilitres") return "ml";
+  if (u === "items" || u === "item" || u === "pcs" || u === "piece" || u === "pieces" || u === "whole" || u === "unit" || u === "units") return "items";
+
+  return null;
+}
 
 function validateIngredients(ingredients: unknown): Ingredient[] | null {
   if (!Array.isArray(ingredients)) return null;
-  const valid = ingredients.every(
-    (i: unknown) => {
-      if (typeof i !== "object" || i === null) return false;
-      const obj = i as Record<string, unknown>;
+  const result: Ingredient[] = [];
+  for (const i of ingredients) {
+    if (typeof i !== "object" || i === null) return null;
+    const obj = i as Record<string, unknown>;
+    const unit = normalizeUnit(obj.unit);
+    if (
+      typeof obj.name !== "string" ||
+      typeof obj.amount !== "number" ||
+      obj.amount <= 0 ||
+      !unit
+    ) return null;
+    result.push({ name: obj.name, amount: obj.amount, unit });
+  }
 
-      return (
-        typeof obj.name === "string" &&
-        typeof obj.amount === "number" &&
-        obj.amount > 0 &&
-        VALID_UNITS.includes(obj.unit as SupplyUnit)
-      );
-    },
-  );
-
-  return valid ? (ingredients as Ingredient[]) : null;
+  return result.length > 0 ? result : null;
 }
 
 export async function generateMealPlan(
@@ -117,12 +125,16 @@ Respond ONLY with valid JSON matching this schema:
     if (!parsed.mealSets?.length) return null;
 
     for (const set of parsed.mealSets) {
-      for (const meal of [set.breakfast, set.lunch, set.dinner]) {
-        if (!validateIngredients(meal.ingredients)) return null;
+      for (const key of ["breakfast", "lunch", "dinner"] as const) {
+        const validated = validateIngredients(set[key].ingredients);
+        if (!validated) return null;
+        set[key].ingredients = validated;
       }
     }
     for (const snack of parsed.snacks ?? []) {
-      if (!validateIngredients(snack.ingredients)) return null;
+      const validated = validateIngredients(snack.ingredients);
+      if (!validated) return null;
+      snack.ingredients = validated;
     }
 
     if (email) {

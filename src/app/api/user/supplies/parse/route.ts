@@ -29,7 +29,9 @@ export async function POST(request: Request) {
   }
 
   const sanitized = text.replace(/[\n\r]/g, " ").trim();
-  const items = await parseSuppliesText(sanitized);
+  const { existingItems } = body as Record<string, unknown>;
+  const existing = Array.isArray(existingItems) ? existingItems.filter((i): i is string => typeof i === "string") : undefined;
+  const items = await parseSuppliesText(sanitized, existing);
 
   if (!items) {
     return NextResponse.json(
