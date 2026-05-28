@@ -458,11 +458,11 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [x] 4.1 TypeScript compiles
-- [x] 4.2 Lint passes
-- [x] 4.3 addItems merges correctly
-- [x] 4.4 removeItem deletes and syncs
-- [x] 4.5 updateItem with 0 removes item
+- [x] 4.1 TypeScript compiles — 4256ec6
+- [x] 4.2 Lint passes — 4256ec6
+- [x] 4.3 addItems merges correctly — 4256ec6
+- [x] 4.4 removeItem deletes and syncs — 4256ec6
+- [x] 4.5 updateItem with 0 removes item — 4256ec6
 
 #### Manual
 
@@ -473,9 +473,9 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [ ] 5.1 TypeScript compiles
-- [ ] 5.2 Lint passes
-- [ ] 5.3 No references to SUPPLY_CATEGORIES or toggleSupply remain
+- [x] 5.1 TypeScript compiles
+- [x] 5.2 Lint passes
+- [x] 5.3 No references to SUPPLY_CATEGORIES or toggleSupply remain
 
 #### Manual
 
