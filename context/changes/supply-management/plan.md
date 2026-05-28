@@ -450,9 +450,9 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Manual
 
-- [x] 3.5 LLM respects exact item names in recipes
-- [x] 3.6 LLM handles edge cases (no unit, large quantities)
-- [x] 3.7 Sanitization strips injection attempts
+- [x] 3.5 LLM respects exact item names in recipes — 835221c
+- [x] 3.6 LLM handles edge cases (no unit, large quantities) — 835221c
+- [x] 3.7 Sanitization strips injection attempts — 835221c
 
 ### Phase 4: Client Hooks & State
 
@@ -466,8 +466,8 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Manual
 
-- [x] 4.6 Optimistic updates feel instant
-- [x] 4.7 Server sync works on refresh
+- [x] 4.6 Optimistic updates feel instant — 835221c
+- [x] 4.7 Server sync works on refresh — 835221c
 
 ### Phase 5: Supplies Page UI
 
@@ -489,13 +489,13 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [x] 6.1 TypeScript compiles
-- [x] 6.2 Lint passes
-- [x] 6.3 Build succeeds
-- [x] 6.4 No remaining boolean supply patterns in codebase
+- [x] 6.1 TypeScript compiles — 835221c
+- [x] 6.2 Lint passes — 835221c
+- [x] 6.3 Build succeeds — 835221c
+- [x] 6.4 No remaining boolean supply patterns in codebase — 835221c
 
 #### Manual
 
-- [x] 6.5 Full flow: add → generate → pick → deduction correct
-- [x] 6.6 Cron works with new format
-- [x] 6.7 Empty supplies shows appropriate message
+- [x] 6.5 Full flow: add → generate → pick → deduction correct — 835221c
+- [x] 6.6 Cron works with new format — 835221c
+- [x] 6.7 Empty supplies shows appropriate message — 835221c

@@ -2,7 +2,7 @@
 id: supply-management
 roadmap_id: S-03
 title: "Category-based supply management with quantity tracking"
-status: implementing
+status: implemented
 created: 2026-05-28
 updated: 2026-05-28
 ---
