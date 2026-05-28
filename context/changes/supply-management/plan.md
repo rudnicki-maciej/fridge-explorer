@@ -443,10 +443,10 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [x] 3.1 parseSuppliesText returns structured array
-- [x] 3.2 generateMealPlan with new supplies returns structured ingredients
-- [x] 3.3 TypeScript compiles
-- [x] 3.4 Lint passes
+- [x] 3.1 parseSuppliesText returns structured array — 1b3ff25
+- [x] 3.2 generateMealPlan with new supplies returns structured ingredients — 1b3ff25
+- [x] 3.3 TypeScript compiles — 1b3ff25
+- [x] 3.4 Lint passes — 1b3ff25
 
 #### Manual
 
@@ -458,11 +458,11 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [ ] 4.1 TypeScript compiles
-- [ ] 4.2 Lint passes
-- [ ] 4.3 addItems merges correctly
-- [ ] 4.4 removeItem deletes and syncs
-- [ ] 4.5 updateItem with 0 removes item
+- [x] 4.1 TypeScript compiles
+- [x] 4.2 Lint passes
+- [x] 4.3 addItems merges correctly
+- [x] 4.4 removeItem deletes and syncs
+- [x] 4.5 updateItem with 0 removes item
 
 #### Manual
 

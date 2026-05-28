@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
-import type { UserSettings, Supplies, DailyPlan } from "@/types";
+import type { UserSettings, Supplies, DailyPlan, SupplyUnit } from "@/types";
 
 const emptySubscribe = () => () => {};
 const getClientSnapshot = () => true;
@@ -104,7 +104,50 @@ export function useSupplies() {
     syncToServer("/api/user/supplies", next);
   }, []);
 
-  return { supplies, updateSupplies, loaded: mounted && hydrated };
+  const addItems = useCallback((items: { name: string; amount: number; unit: SupplyUnit }[]) => {
+    setSupplies((prev) => {
+      const next = { ...prev };
+      for (const item of items) {
+        if (next[item.name]) {
+          next[item.name] = { ...next[item.name], amount: next[item.name].amount + item.amount };
+        } else {
+          next[item.name] = { amount: item.amount, unit: item.unit };
+        }
+      }
+      setItem(KEYS.supplies, next);
+      syncToServer("/api/user/supplies", next);
+
+      return next;
+    });
+  }, []);
+
+  const removeItem = useCallback((name: string) => {
+    setSupplies((prev) => {
+      const next = { ...prev };
+      delete next[name];
+      setItem(KEYS.supplies, next);
+      syncToServer("/api/user/supplies", next);
+
+      return next;
+    });
+  }, []);
+
+  const updateItem = useCallback((name: string, amount: number) => {
+    setSupplies((prev) => {
+      const next = { ...prev };
+      if (amount <= 0) {
+        delete next[name];
+      } else {
+        next[name] = { ...next[name], amount };
+      }
+      setItem(KEYS.supplies, next);
+      syncToServer("/api/user/supplies", next);
+
+      return next;
+    });
+  }, []);
+
+  return { supplies, updateSupplies, addItems, removeItem, updateItem, loaded: mounted && hydrated };
 }
 
 export function useDailyPlan() {
