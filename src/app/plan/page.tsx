@@ -21,7 +21,7 @@ export default function PlanPage() {
   useEffect(() => {
     if (!loaded || plan || serverChecked) return;
 
-    const stocked = Object.entries(supplies).filter(([, v]) => v);
+    const stocked = Object.keys(supplies);
     if (stocked.length === 0) {
       // Use a microtask to avoid synchronous setState in effect body
       queueMicrotask(() => setServerChecked(true));
@@ -42,7 +42,7 @@ export default function PlanPage() {
 
   if (!loaded) return null;
 
-  const stocked = Object.entries(supplies).filter(([, v]) => v);
+  const stocked = Object.keys(supplies);
 
   const generatePlan = async () => {
     setLoading(true);
@@ -82,10 +82,13 @@ export default function PlanPage() {
     ];
     const next = { ...supplies };
     for (const ingredient of usedIngredients) {
-      const lower = ingredient.toLowerCase();
-      for (const key of Object.keys(next)) {
-        if (lower.includes(key) || key.includes(lower)) {
-          next[key] = false;
+      if (next[ingredient.name]) {
+        next[ingredient.name] = {
+          ...next[ingredient.name],
+          amount: next[ingredient.name].amount - ingredient.amount,
+        };
+        if (next[ingredient.name].amount <= 0) {
+          delete next[ingredient.name];
         }
       }
     }

@@ -416,28 +416,28 @@ Update the plan page's stocked check and the cron route to work with the new sup
 
 #### Automated
 
-- [x] 1.1 TypeScript compiles with no errors in src/types.ts
-- [x] 1.2 No remaining references to SUPPLY_CATEGORIES or SupplyCategory in types.ts
+- [x] 1.1 TypeScript compiles with no errors in src/types.ts — 6f864f6
+- [x] 1.2 No remaining references to SUPPLY_CATEGORIES or SupplyCategory in types.ts — 6f864f6
 
 #### Manual
 
-- [x] 1.3 Type definitions are clean and minimal
+- [x] 1.3 Type definitions are clean and minimal — 6f864f6
 
 ### Phase 2: API Layer & Validation
 
 #### Automated
 
-- [ ] 2.1 PUT with old boolean format returns 400
-- [ ] 2.2 PUT with valid new format returns 200
-- [ ] 2.3 POST /api/user/supplies/parse with valid text returns parsed items
-- [ ] 2.4 POST with empty text returns 400
-- [ ] 2.5 TypeScript compiles
-- [ ] 2.6 Lint passes
+- [x] 2.1 PUT with old boolean format returns 400
+- [x] 2.2 PUT with valid new format returns 200
+- [x] 2.3 POST /api/user/supplies/parse with valid text returns parsed items
+- [x] 2.4 POST with empty text returns 400
+- [x] 2.5 TypeScript compiles
+- [x] 2.6 Lint passes
 
 #### Manual
 
-- [ ] 2.7 PUT edge cases: amount=0, negative, invalid unit, long item name
-- [ ] 2.8 Parse endpoint with various natural language inputs
+- [x] 2.7 PUT edge cases: amount=0, negative, invalid unit, long item name
+- [x] 2.8 Parse endpoint with various natural language inputs
 
 ### Phase 3: LLM Integration
 

@@ -104,17 +104,7 @@ export function useSupplies() {
     syncToServer("/api/user/supplies", next);
   }, []);
 
-  const toggleSupply = useCallback(
-    (category: string) => {
-      const next = { ...supplies, [category]: !supplies[category] };
-      setSupplies(next);
-      setItem(KEYS.supplies, next);
-      syncToServer("/api/user/supplies", next);
-    },
-    [supplies]
-  );
-
-  return { supplies, updateSupplies, toggleSupply, loaded: mounted && hydrated };
+  return { supplies, updateSupplies, loaded: mounted && hydrated };
 }
 
 export function useDailyPlan() {
