@@ -18,35 +18,42 @@ export async function POST(request: Request) {
   let skipped = 0;
   let failed = 0;
 
-  for (const userId of userIds) {
-    const user = await getUser(userId);
-    if (!user) continue;
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < userIds.length; i += BATCH_SIZE) {
+    const batch = userIds.slice(i, i + BATCH_SIZE);
+    await Promise.all(batch.map(async (userId) => {
+      try {
+        const user = await getUser(userId);
+        if (!user) return;
 
-    const stocked = Object.keys(user.supplies).length > 0;
-    if (!stocked) {
-      skipped++;
-      continue;
-    }
+        const stocked = Object.keys(user.supplies).length > 0;
+        if (!stocked) {
+          skipped++;
+          return;
+        }
 
-    const hash = computeInputHash(user.settings, user.supplies);
+        const hash = computeInputHash(user.settings, user.supplies);
 
-    // Skip if already generated for tomorrow with same inputs
-    if (
-      user.pregenerated?.date === targetDate &&
-      user.pregenerated?.inputHash === hash
-    ) {
-      skipped++;
-      continue;
-    }
+        if (
+          user.pregenerated?.date === targetDate &&
+          user.pregenerated?.inputHash === hash
+        ) {
+          skipped++;
+          return;
+        }
 
-    const result = await generateMealPlan(user.settings, user.supplies, userId);
-    if (result) {
-      user.pregenerated = { date: targetDate, inputHash: hash, ...result };
-      await setUser(userId, user);
-      generated++;
-    } else {
-      failed++;
-    }
+        const result = await generateMealPlan(user.settings, user.supplies, userId);
+        if (result) {
+          user.pregenerated = { date: targetDate, inputHash: hash, ...result };
+          await setUser(userId, user);
+          generated++;
+        } else {
+          failed++;
+        }
+      } catch {
+        failed++;
+      }
+    }));
   }
 
   return NextResponse.json({ generated, skipped, failed, total: userIds.length });

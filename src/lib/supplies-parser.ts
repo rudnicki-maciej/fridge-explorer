@@ -8,7 +8,7 @@ export async function parseSuppliesText(
   if (!apiKey) return null;
 
   const existingContext = existingItems?.length
-    ? `\nExisting items for unit consistency: ${existingItems.join(", ")}`
+    ? `\nExisting items for unit consistency: ${existingItems.map((s) => s.replace(/[\n\r]/g, " ").trim().slice(0, 50)).join(", ")}`
     : "";
 
   const prompt = `Parse the following natural language text into a JSON object with an "items" array. Each item has: name (string, lowercase), amount (number, >0), unit ("g" | "ml" | "items").
@@ -39,6 +39,7 @@ Respond ONLY with valid JSON: { "items": [{ "name": "...", "amount": 100, "unit"
         temperature: 0.2,
         response_format: { type: "json_object" },
       }),
+      signal: AbortSignal.timeout(30_000),
     });
 
     if (!response.ok) return null;

@@ -112,6 +112,7 @@ Respond ONLY with valid JSON matching this schema:
         temperature: 0.8,
         response_format: { type: "json_object" },
       }),
+      signal: AbortSignal.timeout(30_000),
     });
 
     if (!response.ok) return null;
