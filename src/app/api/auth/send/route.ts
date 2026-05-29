@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { generateMagicToken, storeMagicToken } from "@/lib/auth";
+import { generateMagicToken, storeMagicToken, isTestAccount, createSessionToken, setSessionCookie } from "@/lib/auth";
 import { sendMagicLinkEmail } from "@/lib/email";
+import { getUser, createUser } from "@/lib/kv";
 
 export async function POST(request: Request) {
   let email: string | undefined;
@@ -16,9 +17,19 @@ export async function POST(request: Request) {
 
   try {
     const normalized = email.toLowerCase();
-    const token = generateMagicToken();
-    await storeMagicToken(normalized, token);
-    await sendMagicLinkEmail(normalized, token);
+
+    if (isTestAccount(normalized)) {
+      if (!(await getUser(normalized))) {
+        await createUser(normalized);
+      }
+      const token = await createSessionToken(normalized);
+      await setSessionCookie(token);
+      return NextResponse.json({ ok: true, token, testAccount: true });
+    }
+
+    const magicToken = generateMagicToken();
+    await storeMagicToken(normalized, magicToken);
+    await sendMagicLinkEmail(normalized, magicToken);
 
     return NextResponse.json({ ok: true });
   } catch (error) {
