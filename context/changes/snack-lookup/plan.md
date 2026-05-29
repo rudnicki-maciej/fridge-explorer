@@ -236,8 +236,8 @@ Add /snacks to the nav bar and extract the snack card rendering into a pattern r
 
 #### Automated
 
-- [ ] 1.1 TypeScript compiles
-- [ ] 1.2 Lint passes
+- [x] 1.1 TypeScript compiles — d9cb817
+- [x] 1.2 Lint passes — d9cb817
 
 #### Manual
 
@@ -250,9 +250,9 @@ Add /snacks to the nav bar and extract the snack card rendering into a pattern r
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles
-- [ ] 2.2 Lint passes
-- [ ] 2.3 Build succeeds
+- [x] 2.1 TypeScript compiles — a8f3a6b
+- [x] 2.2 Lint passes — a8f3a6b
+- [x] 2.3 Build succeeds — a8f3a6b
 
 #### Manual
 
@@ -265,9 +265,9 @@ Add /snacks to the nav bar and extract the snack card rendering into a pattern r
 
 #### Automated
 
-- [ ] 3.1 TypeScript compiles
-- [ ] 3.2 Lint passes
-- [ ] 3.3 Build succeeds
+- [x] 3.1 TypeScript compiles — e7ea9d0
+- [x] 3.2 Lint passes — e7ea9d0
+- [x] 3.3 Build succeeds — e7ea9d0
 
 #### Manual
 
