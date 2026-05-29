@@ -1,7 +1,7 @@
 ---
 change_id: test-accounts
 title: Test accounts that bypass magic link for demo and development
-status: new
+status: planned
 created: 2026-05-29
 updated: 2026-05-29
 archived_at: null
