@@ -12,6 +12,7 @@ function validateSupplies(body: unknown): Supplies | null {
 
   const entries = Object.entries(body as Record<string, unknown>);
   if (entries.length === 0) return {};
+  if (entries.length > 200) return null;
 
   const validated: Supplies = {};
   for (const [key, value] of entries) {

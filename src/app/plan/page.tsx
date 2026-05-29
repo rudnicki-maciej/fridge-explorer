@@ -72,6 +72,8 @@ export default function PlanPage() {
   };
 
   const pickSet = (set: MealSet) => {
+    if (!confirm("Pick this set? Ingredients will be deducted from your supplies.")) return;
+
     const today = new Date().toISOString().split("T")[0];
     savePlan({ date: today, chosenSetId: set.id, mealSet: set });
 
