@@ -38,11 +38,41 @@ const DEFAULT_SETTINGS: UserSettings = {
 };
 
 function syncToServer(path: string, data: unknown) {
-  fetch(path, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  }).catch(() => {});
+  const attempt = async (retries = 2) => {
+    try {
+      const res = await fetch(path, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`${res.status}`);
+      syncListeners.forEach((l) => l(null));
+    } catch {
+      if (retries > 0) {
+        await new Promise((r) => setTimeout(r, 1500));
+        return attempt(retries - 1);
+      }
+      syncListeners.forEach((l) => l("Changes not saved — please check your connection."));
+    }
+  };
+  attempt();
+}
+
+type SyncListener = (error: string | null) => void;
+const syncListeners = new Set<SyncListener>();
+
+export function useSyncStatus() {
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const listener: SyncListener = (err) => setError(err);
+    syncListeners.add(listener);
+    return () => { syncListeners.delete(listener); };
+  }, []);
+
+  const dismiss = useCallback(() => setError(null), []);
+
+  return { syncError: error, dismissSyncError: dismiss };
 }
 
 export function useSettings() {

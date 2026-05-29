@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { SyncToast } from "./SyncToast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
           </div>
         </nav>
         <main className="flex-1">{children}</main>
+        <SyncToast />
       </body>
     </html>
   );
