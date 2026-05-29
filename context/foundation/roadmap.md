@@ -31,6 +31,7 @@ A hard-working professional needs a way to turn what's already in the fridge and
 |---|---|---|---|---|---|
 | F-01 | email-magic-link-auth | (foundation) email magic-link auth replaces JWT scaffold; data tied to email identity | — | FR-012, FR-013, Access Control | done |
 | F-02 | basic-observability | (foundation) product metrics in place: confirmed user count, per-user request volume | F-01 | NFR-04 | done |
+| F-03 | test-accounts | (foundation) 10 test accounts bypass magic link for demo and testing | F-01 | — | ready |
 | S-01 | daily-meal-set-generation | user can see 2–3 coordinated full-day meal sets from available supplies and pick one | — | US-01, FR-006, FR-007, FR-008, FR-010, FR-011 | done |
 | S-02 | setup-and-preferences | user can set calorie target and dietary disallow-list | — | FR-001, FR-002, FR-003 | ready |
 | S-03 | supply-management | user can add supplies via category checklists or natural language text and see them reduced when a meal is picked | — | FR-004, FR-005, FR-012 | done |
@@ -44,7 +45,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | Stream | Theme | Chain | Note |
 |---|---|---|---|
 | A | Core meal planning | `S-02` / `S-03` → `S-01` → `S-04` | Main validation track — proves the product hypothesis. `S-02` and `S-03` are parallel prerequisites for `S-01`. |
-| B | Auth & observability | `F-01` → `F-02` | Enables multi-device access and usage monitoring. Independent of Stream A until integration. |
+| B | Auth & observability | `F-01` → `F-02` / `F-03` | Enables multi-device access and usage monitoring. F-03 unblocks demo/dev. |
 | C | Snack lookup | `S-03` → `S-05` | Lightweight add-on once supplies exist. Joins Stream A at `S-03`. |
 
 ## Baseline
@@ -86,6 +87,19 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:** —
 - **Risk:** Sequenced after F-01 because "confirmed email count" requires email auth to exist; low implementation risk given Vercel's built-in analytics or lightweight custom counters in Redis.
 - **Status:** done
+
+### F-03: Test accounts for demo and development
+
+- **Outcome:** (foundation) 10 pre-configured test accounts bypass magic link auth — entering a test email grants immediate session without email delivery, unblocking demos and development on Resend free tier.
+- **Change ID:** test-accounts
+- **PRD refs:** —
+- **Unlocks:** faster demo loops, unblocks development when Resend dev mode limits to one email
+- **Prerequisites:** F-01
+- **Parallel with:** S-02, S-04, S-05
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Low — test accounts must be gated behind an env var or non-production check to avoid shipping an auth bypass to production.
+- **Status:** ready
 
 ## Slices
 
@@ -156,6 +170,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 |---|---|---|---|---|
 | F-01 | email-magic-link-auth | Implement email magic-link authentication | yes | Replaces existing JWT scaffold |
 | F-02 | basic-observability | Add basic product observability (user count, request volume) | no | Depends on F-01 |
+| F-03 | test-accounts | Test accounts bypassing magic link for demo/dev | yes | Depends on F-01 |
 | S-01 | daily-meal-set-generation | Full-day meal set generation from supplies | yes | North star — plan first |
 | S-02 | setup-and-preferences | Calorie target and disallow-list setup | yes | Parallel with S-01 |
 | S-03 | supply-management | Category-based supply management with auto-reduction | yes | Parallel with S-01 |
