@@ -171,8 +171,8 @@ Update the login page to detect test account responses and show a brief "Test ac
 
 #### Automated
 
-- [ ] 1.1 TypeScript compiles
-- [ ] 1.2 Lint passes
+- [x] 1.1 TypeScript compiles — cb92e14
+- [x] 1.2 Lint passes — cb92e14
 
 #### Manual
 
@@ -186,9 +186,9 @@ Update the login page to detect test account responses and show a brief "Test ac
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles
-- [ ] 2.2 Lint passes
-- [ ] 2.3 Build succeeds
+- [x] 2.1 TypeScript compiles — 2776129
+- [x] 2.2 Lint passes — 2776129
+- [x] 2.3 Build succeeds — 2776129
 
 #### Manual
 

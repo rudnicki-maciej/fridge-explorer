@@ -1,14 +1,15 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 function LoginForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const errorParam = searchParams.get("error");
 
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "test-entering" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,12 +29,30 @@ function LoginForm() {
         throw new Error(data.error || "Something went wrong");
       }
 
-      setState("sent");
+      const data = await res.json();
+
+      if (data.testAccount) {
+        setState("test-entering");
+        setTimeout(() => router.push("/plan"), 1000);
+      } else {
+        setState("sent");
+      }
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
       setState("error");
     }
   };
+
+  if (state === "test-entering") {
+    return (
+      <div className="mx-auto flex min-h-screen max-w-sm flex-col items-center justify-center p-6">
+        <div className="w-full space-y-4 text-center">
+          <h1 className="text-2xl font-bold">Test account</h1>
+          <p className="text-sm text-zinc-500 animate-pulse">Entering...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (state === "sent") {
     return (
