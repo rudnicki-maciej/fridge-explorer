@@ -22,3 +22,17 @@
 - **Problem**: `request.json()` was called without try/catch (malformed JSON → 500 with stack trace) and the result was cast to a TypeScript type without runtime validation (arbitrary data persisted to Redis). TypeScript types provide zero runtime safety.
 - **Rule**: Every API route that reads `request.json()` must: (1) wrap it in try/catch returning 400 on parse failure, (2) validate the parsed body's shape and value constraints before persisting. Never rely on TypeScript `as` casts as a substitute for runtime validation.
 - **Applies to**: plan, implement, impl-review
+
+## Never use serial await loops over unbounded collections in serverless handlers
+
+- **Context**: src/app/api/cron/generate/route.ts — cron handler iterating all users with sequential `await` on LLM calls.
+- **Problem**: Each iteration blocks on an external API call (2–10s). Total execution time grows linearly with user count, hitting serverless timeouts (60s) at low scale (~6–30 users). A single slow/failed call also delays all subsequent users.
+- **Rule**: When iterating an unbounded collection with async external calls in a serverless function, use batched `Promise.all` (e.g., chunks of 5) with per-item try/catch for error isolation. Never serial-await over a list that grows with users/data.
+- **Applies to**: plan, implement, impl-review
+
+## Always confirm destructive client-side state mutations before executing
+
+- **Context**: src/app/plan/page.tsx — "Pick this set" button immediately deducts supply quantities with no undo path.
+- **Problem**: Irreversible client-side mutations (deleting data, deducting quantities, clearing state) triggered by a single click can cause data loss on misclick. When combined with optimistic updates and async server sync, the user has no recovery path if they act accidentally.
+- **Rule**: Any user action that irreversibly mutates persisted state (deductions, deletions, resets) must have a confirmation step — either a confirm dialog, an undo window, or a two-step UI (select → confirm). Trivial toggles and editable fields are exempt.
+- **Applies to**: plan, implement, impl-review
