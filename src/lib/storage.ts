@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
-import type { UserSettings, Supplies, DailyPlan, SupplyUnit } from "@/types";
+import type { UserSettings, Supplies, DailyPlan, Snack, SupplyUnit } from "@/types";
 
 const emptySubscribe = () => () => {};
 const getClientSnapshot = () => true;
@@ -30,6 +30,7 @@ const KEYS = {
   settings: "fridge-explorer:settings",
   supplies: "fridge-explorer:supplies",
   dailyPlan: "fridge-explorer:daily-plan",
+  snacks: "fridge-explorer:snacks",
 } as const;
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -199,4 +200,40 @@ export function useDailyPlan() {
   }, []);
 
   return { plan, savePlan, clearPlan, loaded };
+}
+
+export function useSnacks() {
+  const [snacks, setSnacks] = useState<Snack[]>(() => getItem(KEYS.snacks, []));
+  const mounted = useMounted();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    if (getItem<Snack[]>(KEYS.snacks, []).length > 0) {
+      Promise.resolve().then(() => setHydrated(true));
+
+      return;
+    }
+    fetch("/api/user/snacks")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { snacks: Snack[] } | null) => {
+        if (data?.snacks?.length) {
+          setSnacks(data.snacks);
+          setItem(KEYS.snacks, data.snacks);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setHydrated(true));
+  }, []);
+
+  const saveSnacks = useCallback((next: Snack[]) => {
+    setSnacks(next);
+    setItem(KEYS.snacks, next);
+  }, []);
+
+  const clearSnacks = useCallback(() => {
+    setSnacks([]);
+    localStorage.removeItem(KEYS.snacks);
+  }, []);
+
+  return { snacks, saveSnacks, clearSnacks, loaded: mounted && hydrated };
 }
