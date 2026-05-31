@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import crypto from "crypto";
 import { redis } from "@/lib/kv";
 
@@ -46,9 +46,17 @@ export async function createSessionToken(email: string): Promise<string> {
     .sign(SECRET);
 }
 
+export function isTestAccount(email: string): boolean {
+  return /^test([1-9]|10)@fridge\.dev$/i.test(email);
+}
+
 export async function verifySession(): Promise<string | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
+  const headerStore = await headers();
+  const auth = headerStore.get("authorization");
+  const token = auth?.startsWith("Bearer ")
+    ? auth.slice(7)
+    : (await cookies()).get(COOKIE_NAME)?.value;
+
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, SECRET);
