@@ -176,11 +176,11 @@ Update the login page to detect test account responses and show a brief "Test ac
 
 #### Manual
 
-- [ ] 1.3 POST /api/auth/send with test email returns token
-- [ ] 1.4 Non-test email sends magic link normally
-- [ ] 1.5 Bearer header works on protected endpoints
-- [ ] 1.6 Cookie auth still works (no regression)
-- [ ] 1.7 Case-insensitive test email matching
+- [x] 1.3 POST /api/auth/send with test email returns token
+- [x] 1.4 Non-test email sends magic link normally
+- [x] 1.5 Bearer header works on protected endpoints
+- [x] 1.6 Cookie auth still works (no regression)
+- [x] 1.7 Case-insensitive test email matching
 
 ### Phase 2: Login Page Interstitial
 
@@ -192,6 +192,6 @@ Update the login page to detect test account responses and show a brief "Test ac
 
 #### Manual
 
-- [ ] 2.4 Test email shows interstitial then redirects to /plan
-- [ ] 2.5 Real email shows "Check your email" (unchanged)
-- [ ] 2.6 Session persists after redirect (cookie set)
+- [x] 2.4 Test email shows interstitial then redirects to /plan
+- [x] 2.5 Real email shows "Check your email" (unchanged)
+- [x] 2.6 Session persists after redirect (cookie set)
