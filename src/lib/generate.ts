@@ -51,6 +51,81 @@ function validateIngredients(ingredients: unknown): Ingredient[] | null {
   return result.length > 0 ? result : null;
 }
 
+export async function generateSnacks(
+  supplies: Supplies,
+  disallowList: string[],
+  email?: string,
+): Promise<Snack[] | null> {
+  if (Object.keys(supplies).length === 0) return null;
+
+  const supplyListing = formatSupplies(supplies);
+  const sanitizedDisallow = disallowList.map((s) => sanitizeName(s)).filter((s) => s.length > 0);
+
+  const prompt = `You are a snack suggestion assistant. Suggest exactly 4 snack options from available supplies.
+
+CONSTRAINTS:
+- Available supplies: ${supplyListing}
+- NEVER include these foods: ${sanitizedDisallow.length > 0 ? sanitizedDisallow.join(", ") : "none"}
+- Each snack should be approximately 200 kcal
+- Only use ingredients whose names EXACTLY match the available supply item names
+- Each ingredient entry must specify the exact amount used from supplies
+
+Respond ONLY with valid JSON matching this schema:
+{
+  "snacks": [
+    { "name": "...", "description": "...", "calories": 200, "ingredients": [{ "name": "...", "amount": 100, "unit": "g" }] }
+  ]
+}`;
+
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+
+  try {
+    const start = Date.now();
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.8,
+        response_format: { type: "json_object" },
+      }),
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const latencyMs = Date.now() - start;
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) return null;
+
+    const parsed = JSON.parse(content) as { snacks: Snack[] };
+    if (!parsed.snacks?.length) return null;
+
+    for (const snack of parsed.snacks) {
+      const validated = validateIngredients(snack.ingredients);
+      if (!validated) return null;
+      snack.ingredients = validated;
+    }
+
+    if (email) {
+      recordGeneration(email, latencyMs, {
+        prompt: data.usage?.prompt_tokens ?? 0,
+        completion: data.usage?.completion_tokens ?? 0,
+      }).catch(() => {});
+    }
+
+    return parsed.snacks;
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMealPlan(
   settings: UserSettings,
   supplies: Supplies,

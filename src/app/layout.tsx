@@ -34,6 +34,9 @@ export default function RootLayout({
               <Link href="/supplies" className="hover:underline">
                 Supplies
               </Link>
+              <Link href="/snacks" className="hover:underline">
+                Snacks
+              </Link>
               <Link href="/settings" className="hover:underline">
                 Settings
               </Link>
