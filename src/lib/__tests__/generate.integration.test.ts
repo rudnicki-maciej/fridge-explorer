@@ -57,7 +57,7 @@ describe("generateMealPlan integration", () => {
     delete process.env.OPENAI_API_KEY;
   });
 
-  test("returns null when LLM response contains disallowed ingredient", async () => {
+  test(`returns null when LLM response contains disallowed ingredient`, async () => {
     global.fetch = vi.fn().mockResolvedValue(
       makeOpenAIResponse(validMealSetPayload({ ingredientName: "Peanut Butter" })),
     ) as unknown as typeof fetch;
@@ -67,7 +67,7 @@ describe("generateMealPlan integration", () => {
     expect(result).toBeNull();
   });
 
-  test("returns null when totalCalories exceeds target × 1.10", async () => {
+  test(`returns null when totalCalories exceeds target × 1.10`, async () => {
     // cap = 1760, so 1761 should fail
     global.fetch = vi.fn().mockResolvedValue(
       makeOpenAIResponse(validMealSetPayload({ totalCalories: 1761 })),
@@ -78,7 +78,7 @@ describe("generateMealPlan integration", () => {
     expect(result).toBeNull();
   });
 
-  test("returns parsed result when all constraints pass", async () => {
+  test(`returns parsed result when all constraints pass`, async () => {
     global.fetch = vi.fn().mockResolvedValue(
       makeOpenAIResponse(validMealSetPayload()),
     ) as unknown as typeof fetch;
@@ -90,7 +90,7 @@ describe("generateMealPlan integration", () => {
     expect(result!.snacks).toHaveLength(1);
   });
 
-  test("returns null on structural validation failure (malformed ingredients)", async () => {
+  test(`returns null on structural validation failure (malformed ingredients)`, async () => {
     const payload = {
       mealSets: [
         {

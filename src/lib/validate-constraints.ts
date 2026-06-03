@@ -1,10 +1,11 @@
 import type { MealSet, Snack, UserSettings } from "@/types";
+import { SNACK_CALORIE_RESERVE } from "@/lib/constants";
 
 export function validateMealPlanConstraints(
   result: { mealSets: MealSet[]; snacks: Snack[] },
   settings: UserSettings,
 ): { mealSets: MealSet[]; snacks: Snack[] } | null {
-  const mainCalories = settings.dailyCalorieTarget - 400;
+  const mainCalories = settings.dailyCalorieTarget - SNACK_CALORIE_RESERVE;
   const caloriesCap = mainCalories * 1.1;
   const disallowLower = settings.disallowList.map((item) => item.toLowerCase());
 

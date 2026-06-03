@@ -36,3 +36,17 @@
 - **Problem**: Irreversible client-side mutations (deleting data, deducting quantities, clearing state) triggered by a single click can cause data loss on misclick. When combined with optimistic updates and async server sync, the user has no recovery path if they act accidentally.
 - **Rule**: Any user action that irreversibly mutates persisted state (deductions, deletions, resets) must have a confirmation step — either a confirm dialog, an undo window, or a two-step UI (select → confirm). Trivial toggles and editable fields are exempt.
 - **Applies to**: plan, implement, impl-review
+
+## Never use silent catch blocks — always log the error
+
+- **Context**: src/lib/generate.ts — async functions calling external APIs (OpenAI) with empty `catch {}` blocks.
+- **Problem**: Silent catch blocks swallow all errors (timeouts, network failures, JSON parse errors) indistinguishably. When generation returns null, there's no observability into whether it was a constraint violation, a network issue, or a bug. Debugging requires reproducing the exact conditions.
+- **Rule**: Every catch block must log the error with at minimum `console.warn("[functionName] failed:", error)`. Never use bare `catch {}` or `catch { return null }` without logging.
+- **Applies to**: plan, implement, impl-review
+
+## No magic numbers — extract named constants for domain values
+
+- **Context**: src/lib/generate.ts and src/lib/validate-constraints.ts — the number 400 (snack calorie reserve) appeared in both files without a name or comment.
+- **Problem**: Magic numbers duplicated across files drift silently. A maintainer changes one without the other, producing inconsistent behavior that passes tests in isolation but breaks in production. Domain-meaningful values deserve a name that explains *what* and *why*.
+- **Rule**: Extract domain-meaningful numeric literals into named constants with a JSDoc comment. Place shared constants in `src/lib/constants.ts`. Per-module constants can stay local. Never duplicate a magic number across files.
+- **Applies to**: plan, implement, impl-review

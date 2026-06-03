@@ -1,9 +1,14 @@
 import type { UserSettings, Supplies, MealSet, Snack, Ingredient, SupplyUnit } from "@/types";
 import { recordGeneration } from "@/lib/metrics";
 import { validateMealPlanConstraints } from "@/lib/validate-constraints";
+import { SNACK_CALORIE_RESERVE } from "@/lib/constants";
 
 export function computeInputHash(settings: UserSettings, supplies: Supplies): string {
-  const input = JSON.stringify({ settings, supplies });
+  const input = JSON.stringify({ settings, supplies }, (_, v) =>
+    v && typeof v === "object" && !Array.isArray(v)
+      ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b)))
+      : v,
+  );
   let hash = 0;
   for (let i = 0; i < input.length; i++) {
     const char = input.charCodeAt(i);
@@ -122,7 +127,8 @@ Respond ONLY with valid JSON matching this schema:
     }
 
     return parsed.snacks;
-  } catch {
+  } catch (error) {
+    console.warn("[generateSnacks] failed:", error);
     return null;
   }
 }
@@ -140,7 +146,7 @@ export async function generateMealPlan(
     .map((s) => sanitizeName(s))
     .filter((s) => s.length > 0);
 
-  const mainCalories = settings.dailyCalorieTarget - 400;
+  const mainCalories = settings.dailyCalorieTarget - SNACK_CALORIE_RESERVE;
 
   const prompt = `You are a meal planning assistant. Generate exactly 3 coordinated full-day meal sets.
 
@@ -224,7 +230,8 @@ Respond ONLY with valid JSON matching this schema:
     }
 
     return parsed;
-  } catch {
+  } catch (error) {
+    console.warn("[generateMealPlan] failed:", error);
     return null;
   }
 }
