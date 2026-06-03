@@ -322,5 +322,5 @@ Fill in the cookbook patterns so future test authors know how to add tests in th
 
 #### Automated
 
-- [x] 5.1 `npm run build` passes
-- [x] 5.2 §6.1 and §6.2 are no longer TBD
+- [x] 5.1 `npm run build` passes — 814542c
+- [x] 5.2 §6.1 and §6.2 are no longer TBD — 814542c
