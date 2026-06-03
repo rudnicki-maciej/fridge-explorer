@@ -1,5 +1,6 @@
 import type { UserSettings, Supplies, MealSet, Snack, Ingredient, SupplyUnit } from "@/types";
 import { recordGeneration } from "@/lib/metrics";
+import { validateMealPlanConstraints } from "@/lib/validate-constraints";
 
 export function computeInputHash(settings: UserSettings, supplies: Supplies): string {
   const input = JSON.stringify({ settings, supplies });
@@ -212,6 +213,8 @@ Respond ONLY with valid JSON matching this schema:
       if (!validated) return null;
       snack.ingredients = validated;
     }
+
+    if (!validateMealPlanConstraints(parsed, settings)) return null;
 
     if (email) {
       recordGeneration(email, latencyMs, {

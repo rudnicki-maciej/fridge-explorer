@@ -304,19 +304,19 @@ Fill in the cookbook patterns so future test authors know how to add tests in th
 
 #### Automated
 
-- [x] 3.1 `npm test` passes with all constraint test cases green
+- [x] 3.1 `npm test` passes with all constraint test cases green — 706a56e
 
 ### Phase 4: Wire Validator + Integration Test
 
 #### Automated
 
-- [ ] 4.1 `npm test` passes with all integration tests green
-- [ ] 4.2 `npm run build` passes
-- [ ] 4.3 `npm run lint` passes
+- [x] 4.1 `npm test` passes with all integration tests green
+- [x] 4.2 `npm run build` passes
+- [x] 4.3 `npm run lint` passes
 
 #### Manual
 
-- [ ] 4.4 Generation still works with real LLM via `npm run dev`
+- [x] 4.4 Generation still works with real LLM via `npm run dev`
 
 ### Phase 5: Update test-plan.md §6 Cookbook
 
