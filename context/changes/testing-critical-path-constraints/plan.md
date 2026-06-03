@@ -289,16 +289,16 @@ Fill in the cookbook patterns so future test authors know how to add tests in th
 
 #### Automated
 
-- [x] 1.1 `npm test` exits 0 with smoke test passing
-- [x] 1.2 `npm run lint` passes
-- [x] 1.3 `npm run build` passes
+- [x] 1.1 `npm test` exits 0 with smoke test passing — f7ff150
+- [x] 1.2 `npm run lint` passes — f7ff150
+- [x] 1.3 `npm run build` passes — f7ff150
 
 ### Phase 2: Create Constraint Validator
 
 #### Automated
 
-- [ ] 2.1 `npm run build` passes (module compiles)
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 `npm run build` passes (module compiles)
+- [x] 2.2 `npm run lint` passes
 
 ### Phase 3: Unit Tests for Validator
 
