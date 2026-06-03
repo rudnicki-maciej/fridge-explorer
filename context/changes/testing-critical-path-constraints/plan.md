@@ -297,14 +297,14 @@ Fill in the cookbook patterns so future test authors know how to add tests in th
 
 #### Automated
 
-- [x] 2.1 `npm run build` passes (module compiles)
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 `npm run build` passes (module compiles) — 4d136df
+- [x] 2.2 `npm run lint` passes — 4d136df
 
 ### Phase 3: Unit Tests for Validator
 
 #### Automated
 
-- [ ] 3.1 `npm test` passes with all constraint test cases green
+- [x] 3.1 `npm test` passes with all constraint test cases green
 
 ### Phase 4: Wire Validator + Integration Test
 
