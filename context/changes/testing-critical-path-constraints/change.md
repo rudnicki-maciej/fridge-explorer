@@ -1,9 +1,9 @@
 ---
 change_id: testing-critical-path-constraints
 title: Prove disallow-list and calorie-target enforcement on generated meal sets
-status: preparing
+status: implementing
 created: 2026-06-02
-updated: 2026-06-02
+updated: 2026-06-03
 archived_at: null
 ---
 
