@@ -213,7 +213,7 @@ Test `repickSet` (Risk #9) and `resetPlan` (Risk #10) as component integration t
 
 #### Automated
 
-- [x] 3.1 Repick yields original minus new set only
-- [x] 3.2 Repick guard path (empty deductedIngredients) deducts from raw supplies
-- [x] 3.3 Reset success: options visible after fetch
-- [x] 3.4 Reset failure: error message visible after fetch rejects
+- [x] 3.1 Repick yields original minus new set only — 1733fd9
+- [x] 3.2 Repick guard path (empty deductedIngredients) deducts from raw supplies — 1733fd9
+- [x] 3.3 Reset success: options visible after fetch — 1733fd9
+- [x] 3.4 Reset failure: error message visible after fetch rejects — 1733fd9
