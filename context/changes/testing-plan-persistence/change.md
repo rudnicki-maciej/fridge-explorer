@@ -1,7 +1,7 @@
 ---
 change_id: testing-plan-persistence
 title: Test plan persistence and cost control (Phase 3 rollout)
-status: implementing
+status: implemented
 created: 2026-06-11
 updated: 2026-06-11
 archived_at: null

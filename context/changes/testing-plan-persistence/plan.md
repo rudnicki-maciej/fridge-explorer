@@ -238,7 +238,7 @@ Test cases:
 
 #### Automated
 
-- [x] 3.1 Tests pass: `npm test src/app/api/cron/generate/__tests__/route.test.ts`
-- [x] 3.2 Full suite passes: `npm test`
-- [x] 3.3 Type checking passes: `npm run build`
-- [x] 3.4 Lint passes: `npm run lint`
+- [x] 3.1 Tests pass: `npm test src/app/api/cron/generate/__tests__/route.test.ts` — 78eba63
+- [x] 3.2 Full suite passes: `npm test` — 78eba63
+- [x] 3.3 Type checking passes: `npm run build` — 78eba63
+- [x] 3.4 Lint passes: `npm run lint` — 78eba63
