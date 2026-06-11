@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
 import type { UserSettings, Supplies, DailyPlan, Snack, SupplyUnit } from "@/types";
+import { mergeItems } from "@/lib/supply-math";
 
 const emptySubscribe = () => () => {};
 const getClientSnapshot = () => true;
@@ -137,14 +138,7 @@ export function useSupplies() {
 
   const addItems = useCallback((items: { name: string; amount: number; unit: SupplyUnit }[]) => {
     setSupplies((prev) => {
-      const next = { ...prev };
-      for (const item of items) {
-        if (next[item.name]) {
-          next[item.name] = { ...next[item.name], amount: next[item.name].amount + item.amount };
-        } else {
-          next[item.name] = { amount: item.amount, unit: item.unit };
-        }
-      }
+      const next = mergeItems(prev, items);
       setItem(KEYS.supplies, next);
       syncToServer("/api/user/supplies", next);
 

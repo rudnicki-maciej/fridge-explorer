@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSettings, useSupplies, useDailyPlan } from "@/lib/storage";
+import { deductIngredients } from "@/lib/supply-math";
 import type { GenerateMealsResponse, MealSet, Snack } from "@/types";
 
 export default function PlanPage() {
@@ -82,18 +83,7 @@ export default function PlanPage() {
       ...set.lunch.ingredients,
       ...set.dinner.ingredients,
     ];
-    const next = { ...supplies };
-    for (const ingredient of usedIngredients) {
-      if (next[ingredient.name]) {
-        next[ingredient.name] = {
-          ...next[ingredient.name],
-          amount: next[ingredient.name].amount - ingredient.amount,
-        };
-        if (next[ingredient.name].amount <= 0) {
-          delete next[ingredient.name];
-        }
-      }
-    }
+    const next = deductIngredients(supplies, usedIngredients);
     updateSupplies(next);
     setMealSets([]);
   };
