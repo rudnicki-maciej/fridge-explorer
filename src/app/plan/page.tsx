@@ -111,7 +111,9 @@ export default function PlanPage() {
     if (!plan) return;
     if (!confirm("Switch to this set? Your supplies will be updated.")) return;
 
-    const restored = restoreIngredients(supplies, plan.deductedIngredients);
+    const restored = plan.deductedIngredients?.length
+      ? restoreIngredients(supplies, plan.deductedIngredients)
+      : supplies;
     const usedIngredients = [
       ...set.breakfast.ingredients,
       ...set.lunch.ingredients,
@@ -145,6 +147,7 @@ export default function PlanPage() {
       }
     } catch (e) {
       console.warn("[plan] failed to fetch options after reset:", e);
+      setError("Could not load your options — try refreshing.");
     }
   };
 
