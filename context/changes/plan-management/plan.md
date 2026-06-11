@@ -272,12 +272,12 @@ Add "Try different options" when browsing, and make "Reset today's plan" undo th
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npm run build`
-- [x] 4.2 Lint passes: `npm run lint`
-- [x] 4.3 Full test suite passes: `npm test`
+- [x] 4.1 Type checking passes: `npm run build` — 4d143b3
+- [x] 4.2 Lint passes: `npm run lint` — 4d143b3
+- [x] 4.3 Full test suite passes: `npm test` — 4d143b3
 
 #### Manual
 
-- [x] 4.4 Browse → Try different options → new options appear
-- [x] 4.5 Pick → Reset → supplies restored → original options shown
-- [x] 4.6 Pick → Reset → Regenerate → fresh options generated
+- [x] 4.4 Browse → Try different options → new options appear — 4d143b3
+- [x] 4.5 Pick → Reset → supplies restored → original options shown — 4d143b3
+- [x] 4.6 Pick → Reset → Regenerate → fresh options generated — 4d143b3
