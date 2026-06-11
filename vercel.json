@@ -1,4 +1,5 @@
 {
+  "buildCommand": "npm test && next build",
   "crons": [
     {
       "path": "/api/cron/generate",
