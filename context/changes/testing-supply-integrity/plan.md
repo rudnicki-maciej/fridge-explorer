@@ -222,6 +222,6 @@ Mock setup: `makeOpenAIResponse({items: [...]})` helper (reuse pattern from `gen
 
 #### Automated
 
-- [x] 3.1 All tests pass: `npm test`
-- [x] 3.2 No type errors: `npm run build`
-- [x] 3.3 Lint passes: `npm run lint`
+- [x] 3.1 All tests pass: `npm test` — f4f5fea
+- [x] 3.2 No type errors: `npm run build` — f4f5fea
+- [x] 3.3 Lint passes: `npm run lint` — f4f5fea

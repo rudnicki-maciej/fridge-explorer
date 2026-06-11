@@ -1,7 +1,7 @@
 ---
 change_id: testing-supply-integrity
 title: "E2E and unit tests for supply integrity: deduction math and NL dedup"
-status: implementing
+status: implemented
 created: 2026-06-11
 updated: 2026-06-11
 archived_at: null
