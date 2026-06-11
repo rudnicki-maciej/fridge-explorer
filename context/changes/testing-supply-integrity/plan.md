@@ -202,26 +202,26 @@ Mock setup: `makeOpenAIResponse({items: [...]})` helper (reuse pattern from `gen
 
 #### Automated
 
-- [x] 1.1 Build passes: `npm run build`
-- [x] 1.2 Existing tests pass: `npm test`
-- [x] 1.3 Lint passes: `npm run lint`
+- [x] 1.1 Build passes: `npm run build` — 400ca94
+- [x] 1.2 Existing tests pass: `npm test` — 400ca94
+- [x] 1.3 Lint passes: `npm run lint` — 400ca94
 
 #### Manual
 
-- [x] 1.4 Pick a meal set → supplies decrease correctly
-- [x] 1.5 Add supplies via NL text → existing items merge, new items appear
+- [x] 1.4 Pick a meal set → supplies decrease correctly — 400ca94
+- [x] 1.5 Add supplies via NL text → existing items merge, new items appear — 400ca94
 
 ### Phase 2: Unit tests for deduction and merge
 
 #### Automated
 
-- [ ] 2.1 All tests pass: `npm test`
-- [ ] 2.2 No type errors: `npm run build`
+- [x] 2.1 All tests pass: `npm test`
+- [x] 2.2 No type errors: `npm run build`
 
 ### Phase 3: Integration tests for NL dedup pipeline
 
 #### Automated
 
-- [ ] 3.1 All tests pass: `npm test`
-- [ ] 3.2 No type errors: `npm run build`
-- [ ] 3.3 Lint passes: `npm run lint`
+- [x] 3.1 All tests pass: `npm test`
+- [x] 3.2 No type errors: `npm run build`
+- [x] 3.3 Lint passes: `npm run lint`
