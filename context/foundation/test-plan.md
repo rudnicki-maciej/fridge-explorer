@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-06-02
+> Last updated: 2026-06-11
 
 ## 1. Strategy
 
@@ -50,10 +50,10 @@ Each row is a discrete rollout phase that will open its own change folder via `/
 
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|-----------|-----------------|---------------|------------|--------|---------------|
-| 1 | Critical-path generation constraints | Prove disallow-list and calorie limits are enforced on LLM output | #1, #2 | unit + integration | implementing | context/changes/testing-critical-path-constraints/ |
-| 2 | Supply integrity | Prove supply state remains accurate after picks and NL additions | #3, #5 | unit + integration | not started | — |
-| 3 | Plan persistence and cost control | Prove generated/picked plans are persisted and reused; cron failures are observable | #4, #6 | integration + unit | not started | — |
-| 4 | Auth lifecycle and quality gates | Prove token expiry/reuse handling; wire CI gates to lock the floor | #7 | unit + e2e-light + CI gates | not started | — |
+| 1 | Critical-path generation constraints | Prove disallow-list and calorie limits are enforced on LLM output | #1, #2 | unit + integration | complete | context/changes/testing-critical-path-constraints/ |
+| 2 | Supply integrity | Prove supply state remains accurate after picks and NL additions | #3, #5 | unit + integration | complete | context/changes/testing-supply-integrity/ |
+| 3 | Plan persistence and cost control | Prove generated/picked plans are persisted and reused; cron failures are observable | #4, #6 | integration + unit | complete | context/changes/testing-plan-persistence/ |
+| 4 | Auth lifecycle and quality gates | Prove token expiry/reuse handling; wire CI gates to lock the floor | #7 | unit + e2e-light + CI gates | complete | context/changes/testing-auth-lifecycle/ |
 
 ## 4. Stack
 
@@ -79,6 +79,13 @@ The classic test base for this project.
 | lint + typecheck | local + CI | required (already wired: `npm run lint`, `npm run build`) | syntactic / type drift |
 | unit + integration | local + CI | required after §3 Phase 1 | logic regressions on generation constraints, supply math |
 | e2e on auth flow | CI on PR | required after §3 Phase 4 | broken login/session lifecycle |
+
+**Auth E2E gate command** (requires Playwright browsers installed in CI):
+
+```bash
+npx playwright install --with-deps chromium
+npx playwright test tests/auth-expired.spec.ts --project=chromium
+```
 | cron health signal | Vercel cron logs + metrics | required after §3 Phase 3 | silent pre-generation failures |
 | post-edit hook | local (agent loop) | recommended after §3 Phase 2 | regressions at edit time |
 
@@ -184,11 +191,85 @@ describe("generateMealPlan integration", () => {
 
 ### 6.3 Adding an e2e test
 
-TBD — see §3 Phase 4 for auth lifecycle (expired token → error → recovery flow).
+**Location**: `tests/<feature>.spec.ts`
+
+**Pattern** (Playwright, role-based locators, wait-for-state):
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+// Risk: #N — [risk description from §2]
+// Seed: tests/seed.spec.ts
+
+test('describes the user-facing behavior being protected', async ({ page }) => {
+  // Navigate to trigger the risk scenario
+  await page.goto('http://localhost:3000/path-that-triggers-risk');
+
+  // Assert redirect / URL change (wait for navigation, not time)
+  await expect(page).toHaveURL(/\/expected-path/);
+
+  // Assert user-visible outcome with role-based locators
+  await expect(page.getByText('Expected message')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Recovery action' })).toBeVisible();
+});
+```
+
+**Key points**:
+- One test per file, one risk per test.
+- `getByRole` / `getByLabel` / `getByText` first; `getByTestId` only when accessibility attributes are ambiguous. Never CSS selectors or XPath.
+- Never `page.waitForTimeout()` — wait for state: `toBeVisible()`, `toHaveURL()`, `waitForResponse()`.
+- Each test is self-contained — own setup, action, assertion, cleanup; no shared state between tests.
+- Comment the risk # at the top for traceability back to §2.
+- Dev server must be running (`npm run dev`) or use `webServer` in `playwright.config.ts`.
+
+**Run single spec**: `npx playwright test tests/<feature>.spec.ts --project=chromium`
+**Run all e2e**: `npx playwright test`
 
 ### 6.4 Adding a test for a new API endpoint
 
-TBD — see §3 Phase 1 for generation endpoint testing pattern and §3 Phase 2 for supply parsing endpoint.
+**Location**: `src/app/api/<route>/__tests__/route.test.ts`
+
+**Pattern** (call route handler directly — no HTTP server):
+
+```typescript
+import { describe, expect, test, vi, beforeEach, afterEach } from "vitest";
+
+vi.mock("@/lib/kv", () => ({
+  redis: { set: vi.fn().mockResolvedValue("OK") },
+  getUser: vi.fn(),
+  setUser: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("@/lib/auth", () => ({
+  verifySession: vi.fn(),
+}));
+
+const { getUser } = await import("@/lib/kv");
+const { verifySession } = await import("@/lib/auth");
+const { GET } = await import("../route");
+
+test("returns cached plan without calling fetch", async () => {
+  // given
+  vi.mocked(verifySession).mockResolvedValue("user@test.dev");
+  vi.mocked(getUser).mockResolvedValue(seededUserData);
+
+  // when
+  const response = await GET();
+  const body = await response.json();
+
+  // then
+  expect(body).toEqual(expectedShape);
+});
+```
+
+**Key points**:
+- Import `{ GET }` / `{ POST }` directly from the route module — Next.js handlers are plain async functions.
+- Mock dependencies at module level with `vi.mock`, then import with `await import()`.
+- For auth-protected routes, mock `verifySession` to return a test email.
+- For cron endpoints, set `process.env.CRON_SECRET` and pass `Authorization: Bearer` header.
+- Assert on response shape and side effects (e.g., `redis.set` called / `global.fetch` not called).
+
+**Run**: `npm test`
 
 ### 6.5 Per-rollout-phase notes
 

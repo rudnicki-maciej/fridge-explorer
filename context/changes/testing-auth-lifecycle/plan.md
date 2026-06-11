@@ -195,19 +195,19 @@ None — tests only, no production code changes.
 
 #### Automated
 
-- [x] 2.1 E2E test passes: `npx playwright test tests/auth-expired.spec.ts`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 E2E test passes: `npx playwright test tests/auth-expired.spec.ts` — 78b998e
+- [x] 2.2 Lint passes: `npm run lint` — 78b998e
 
 #### Manual
 
-- [x] 2.3 Manually verify expired link redirect + error message in browser
+- [x] 2.3 Manually verify expired link redirect + error message in browser — 78b998e
 
 ### Phase 3: Document CI gates
 
 #### Automated
 
-- [ ] 3.1 test-plan.md updated with Phase 4 status and CI gate commands
+- [x] 3.1 test-plan.md updated with Phase 4 status and CI gate commands
 
 #### Manual
 
-- [ ] 3.2 Review updated test-plan.md for accuracy
+- [x] 3.2 Review updated test-plan.md for accuracy
