@@ -249,24 +249,24 @@ Add "Try different options" when browsing, and make "Reset today's plan" undo th
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Type checking passes: `npm run build` — caf7663
+- [x] 2.2 Lint passes: `npm run lint` — caf7663
 
 #### Manual
 
-- [ ] 2.3 GET /api/plan/today?options=true returns options after supply change
+- [x] 2.3 GET /api/plan/today?options=true returns options after supply change — caf7663
 
 ### Phase 3: Plan page — re-pick flow
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Pick Set A → Change pick → Pick Set B → supplies reflect B's deduction
-- [ ] 3.4 Cancel re-pick → plan and supplies unchanged
+- [x] 3.3 Pick Set A → Change pick → Pick Set B → supplies reflect B's deduction
+- [x] 3.4 Cancel re-pick → plan and supplies unchanged
 
 ### Phase 4: Plan page — regenerate & reset
 

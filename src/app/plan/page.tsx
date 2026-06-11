@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSettings, useSupplies, useDailyPlan } from "@/lib/storage";
-import { deductIngredients } from "@/lib/supply-math";
+import { deductIngredients, restoreIngredients } from "@/lib/supply-math";
 import { SNACK_CALORIE_RESERVE } from "@/lib/constants";
 import type { GenerateMealsResponse, MealSet, Snack } from "@/types";
 
@@ -16,6 +16,8 @@ export default function PlanPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [serverChecked, setServerChecked] = useState(false);
+  const [repicking, setRepicking] = useState(false);
+  const [repickOptions, setRepickOptions] = useState<MealSet[]>([]);
 
   const loaded = settingsLoaded && suppliesLoaded && planLoaded;
 
@@ -89,6 +91,92 @@ export default function PlanPage() {
     setMealSets([]);
   };
 
+  const startRepick = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/plan/today?options=true");
+      if (!res.ok) throw new Error("Could not load options");
+      const data: GenerateMealsResponse = await res.json();
+      setRepickOptions(data.mealSets);
+      setRepicking(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const repickSet = (set: MealSet) => {
+    if (!plan) return;
+    if (!confirm("Switch to this set? Your supplies will be updated.")) return;
+
+    const restored = restoreIngredients(supplies, plan.deductedIngredients);
+    const usedIngredients = [
+      ...set.breakfast.ingredients,
+      ...set.lunch.ingredients,
+      ...set.dinner.ingredients,
+    ];
+    const next = deductIngredients(restored, usedIngredients);
+    updateSupplies(next);
+
+    const today = new Date().toISOString().split("T")[0];
+    savePlan({ date: today, chosenSetId: set.id, mealSet: set, deductedIngredients: usedIngredients });
+    setRepicking(false);
+    setRepickOptions([]);
+  };
+
+  if (plan && repicking) {
+    return (
+      <div className="mx-auto max-w-lg space-y-6 p-6">
+        <h1 className="text-2xl font-bold">Change Your Pick</h1>
+        <p className="text-sm text-zinc-500">Select a different set for today.</p>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        <div className="space-y-6">
+          {repickOptions.map((set) => (
+            <div
+              key={set.id}
+              className={`space-y-3 rounded-lg border p-4 ${
+                set.id === plan.chosenSetId
+                  ? "border-green-400 bg-green-50 dark:bg-green-950/20"
+                  : "border-zinc-200 dark:border-zinc-700"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium capitalize">
+                  {set.id.replace("-", " ")}
+                  {set.id === plan.chosenSetId && (
+                    <span className="ml-2 text-xs text-green-600">(current)</span>
+                  )}
+                </h3>
+                <span className="text-xs text-zinc-500">{set.totalCalories} kcal</span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <p><span className="font-medium">Breakfast:</span> {set.breakfast.name}</p>
+                <p><span className="font-medium">Lunch:</span> {set.lunch.name}</p>
+                <p><span className="font-medium">Dinner:</span> {set.dinner.name}</p>
+              </div>
+              {set.id !== plan.chosenSetId && (
+                <button
+                  onClick={() => repickSet(set)}
+                  className="w-full rounded bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700"
+                >
+                  Pick this set
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={() => { setRepicking(false); setRepickOptions([]); }}
+          className="text-sm text-zinc-400 underline hover:text-zinc-600"
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
   if (plan) {
     return (
       <div className="mx-auto max-w-lg space-y-6 p-6">
@@ -102,12 +190,22 @@ export default function PlanPage() {
           Total: {plan.mealSet.totalCalories} kcal (+ {SNACK_CALORIE_RESERVE} kcal snacks)
         </p>
         {snacks.length > 0 && <SnackSection snacks={snacks} />}
-        <button
-          onClick={clearPlan}
-          className="text-sm text-zinc-400 underline hover:text-zinc-600"
-        >
-          Reset today&apos;s plan
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={startRepick}
+            disabled={loading}
+            className="text-sm text-blue-600 underline hover:text-blue-800 disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "Change pick"}
+          </button>
+          <button
+            onClick={clearPlan}
+            className="text-sm text-zinc-400 underline hover:text-zinc-600"
+          >
+            Reset today&apos;s plan
+          </button>
+        </div>
+        {error && <p className="text-sm text-red-500">{error}</p>}
       </div>
     );
   }
