@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllUserIds, getUser, setUser } from "@/lib/kv";
+import { redis, getAllUserIds, getUser, setUser } from "@/lib/kv";
 import { generateMealPlan, computeInputHash } from "@/lib/generate";
 
 export async function POST(request: Request) {
@@ -55,6 +55,13 @@ export async function POST(request: Request) {
       }
     }));
   }
+
+  await redis.set(`cron:lastSuccess:${targetDate}`, {
+    timestamp: new Date().toISOString(),
+    generated,
+    skipped,
+    failed,
+  });
 
   return NextResponse.json({ generated, skipped, failed, total: userIds.length });
 }

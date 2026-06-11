@@ -231,14 +231,14 @@ Test cases:
 
 #### Automated
 
-- [x] 2.1 Tests pass: `npm test src/app/api/plan/today/__tests__/route.test.ts`
-- [x] 2.2 Type checking passes: `npm run build`
+- [x] 2.1 Tests pass: `npm test src/app/api/plan/today/__tests__/route.test.ts` — 9e76ac8
+- [x] 2.2 Type checking passes: `npm run build` — 9e76ac8
 
 ### Phase 3: TDD — cron health signal
 
 #### Automated
 
-- [ ] 3.1 Tests pass: `npm test src/app/api/cron/generate/__tests__/route.test.ts`
-- [ ] 3.2 Full suite passes: `npm test`
-- [ ] 3.3 Type checking passes: `npm run build`
-- [ ] 3.4 Lint passes: `npm run lint`
+- [x] 3.1 Tests pass: `npm test src/app/api/cron/generate/__tests__/route.test.ts`
+- [x] 3.2 Full suite passes: `npm test`
+- [x] 3.3 Type checking passes: `npm run build`
+- [x] 3.4 Lint passes: `npm run lint`
