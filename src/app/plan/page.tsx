@@ -126,6 +126,28 @@ export default function PlanPage() {
     setRepickOptions([]);
   };
 
+  const resetPlan = async () => {
+    if (!plan) return;
+    if (!confirm("Reset today's plan? Your supplies will be restored.")) return;
+
+    if (plan.deductedIngredients?.length) {
+      const restored = restoreIngredients(supplies, plan.deductedIngredients);
+      updateSupplies(restored);
+    }
+    clearPlan();
+
+    try {
+      const res = await fetch("/api/plan/today?options=true");
+      if (res.ok) {
+        const data: GenerateMealsResponse = await res.json();
+        setMealSets(data.mealSets);
+        setSnacks(data.snacks ?? []);
+      }
+    } catch (e) {
+      console.warn("[plan] failed to fetch options after reset:", e);
+    }
+  };
+
   if (plan && repicking) {
     return (
       <div className="mx-auto max-w-lg space-y-6 p-6">
@@ -199,7 +221,7 @@ export default function PlanPage() {
             {loading ? "Loading..." : "Change pick"}
           </button>
           <button
-            onClick={clearPlan}
+            onClick={resetPlan}
             className="text-sm text-zinc-400 underline hover:text-zinc-600"
           >
             Reset today&apos;s plan
@@ -277,6 +299,16 @@ export default function PlanPage() {
             </div>
           ))}
           {snacks.length > 0 && <SnackSection snacks={snacks} />}
+          <button
+            onClick={() => {
+              if (!confirm("Generate new options? This uses AI.")) return;
+              generatePlan();
+            }}
+            disabled={loading}
+            className="w-full rounded-lg border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-600 hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          >
+            {loading ? "Generating..." : "Try different options"}
+          </button>
         </div>
       )}
     </div>

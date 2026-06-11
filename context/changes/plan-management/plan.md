@@ -260,24 +260,24 @@ Add "Try different options" when browsing, and make "Reset today's plan" undo th
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npm run build` — aad7078
+- [x] 3.2 Lint passes: `npm run lint` — aad7078
 
 #### Manual
 
-- [x] 3.3 Pick Set A → Change pick → Pick Set B → supplies reflect B's deduction
-- [x] 3.4 Cancel re-pick → plan and supplies unchanged
+- [x] 3.3 Pick Set A → Change pick → Pick Set B → supplies reflect B's deduction — aad7078
+- [x] 3.4 Cancel re-pick → plan and supplies unchanged — aad7078
 
 ### Phase 4: Plan page — regenerate & reset
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npm run build`
-- [ ] 4.2 Lint passes: `npm run lint`
-- [ ] 4.3 Full test suite passes: `npm test`
+- [x] 4.1 Type checking passes: `npm run build`
+- [x] 4.2 Lint passes: `npm run lint`
+- [x] 4.3 Full test suite passes: `npm test`
 
 #### Manual
 
-- [ ] 4.4 Browse → Try different options → new options appear
-- [ ] 4.5 Pick → Reset → supplies restored → original options shown
-- [ ] 4.6 Pick → Reset → Regenerate → fresh options generated
+- [x] 4.4 Browse → Try different options → new options appear
+- [x] 4.5 Pick → Reset → supplies restored → original options shown
+- [x] 4.6 Pick → Reset → Regenerate → fresh options generated

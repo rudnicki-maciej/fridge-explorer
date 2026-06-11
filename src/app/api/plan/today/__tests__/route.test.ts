@@ -68,7 +68,7 @@ describe("/api/plan/today", () => {
     vi.mocked(getUser).mockResolvedValue(user);
 
     // when
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/plan/today"));
     const body = await response.json();
 
     // then
@@ -82,7 +82,7 @@ describe("/api/plan/today", () => {
     vi.mocked(getUser).mockResolvedValue(user);
 
     // when
-    await GET();
+    await GET(new Request("http://localhost/api/plan/today"));
 
     // then — fetch was called, proving on-demand LLM generation was triggered
     expect(global.fetch).toHaveBeenCalledWith(
@@ -97,7 +97,7 @@ describe("/api/plan/today", () => {
     vi.mocked(getUser).mockResolvedValue(user);
 
     // when
-    await GET();
+    await GET(new Request("http://localhost/api/plan/today"));
 
     // then — fetch was called, proving on-demand LLM generation was triggered
     expect(global.fetch).toHaveBeenCalledWith(
