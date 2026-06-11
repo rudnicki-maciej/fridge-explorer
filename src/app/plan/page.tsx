@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSettings, useSupplies, useDailyPlan } from "@/lib/storage";
 import { deductIngredients } from "@/lib/supply-math";
+import { SNACK_CALORIE_RESERVE } from "@/lib/constants";
 import type { GenerateMealsResponse, MealSet, Snack } from "@/types";
 
 export default function PlanPage() {
@@ -37,7 +38,7 @@ export default function PlanPage() {
           setSnacks(data.snacks ?? []);
         }
       })
-      .catch(() => {})
+      .catch((err) => console.error("[plan] fetch failed:", err))
       .finally(() => setServerChecked(true));
   }, [loaded, plan, serverChecked, supplies]);
 
@@ -98,7 +99,7 @@ export default function PlanPage() {
           <MealCard meal={plan.mealSet.dinner} />
         </div>
         <p className="text-sm text-zinc-500">
-          Total: {plan.mealSet.totalCalories} kcal (+ 400 kcal snacks)
+          Total: {plan.mealSet.totalCalories} kcal (+ {SNACK_CALORIE_RESERVE} kcal snacks)
         </p>
         {snacks.length > 0 && <SnackSection snacks={snacks} />}
         <button

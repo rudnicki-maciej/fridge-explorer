@@ -47,7 +47,11 @@ export async function createSessionToken(email: string): Promise<string> {
 }
 
 export function isTestAccount(email: string): boolean {
-  return /^test([1-9]|10)@fridge\.dev$/i.test(email);
+  return /^test([1-9]|10)@fridge\.dev$/i.test(email) || isSeedAccount(email);
+}
+
+export function isSeedAccount(email: string): boolean {
+  return email === "seed@fridge.dev";
 }
 
 export async function verifySession(): Promise<string | null> {

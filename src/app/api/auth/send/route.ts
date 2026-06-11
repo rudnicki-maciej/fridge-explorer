@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { generateMagicToken, storeMagicToken, isTestAccount, createSessionToken, setSessionCookie } from "@/lib/auth";
+import { generateMagicToken, storeMagicToken, isTestAccount, isSeedAccount, createSessionToken, setSessionCookie } from "@/lib/auth";
 import { sendMagicLinkEmail } from "@/lib/email";
-import { getUser, createUser } from "@/lib/kv";
+import { getUser, createUser, setUser, type UserData } from "@/lib/kv";
 
 export async function POST(request: Request) {
   let email: string | undefined;
@@ -19,7 +19,15 @@ export async function POST(request: Request) {
     const normalized = email.toLowerCase();
 
     if (isTestAccount(normalized)) {
-      if (!(await getUser(normalized))) {
+      if (isSeedAccount(normalized)) {
+        const freshData: UserData = {
+          settings: { dailyCalorieTarget: 2000, disallowList: [] },
+          supplies: {},
+          pregenerated: null,
+          updatedAt: new Date().toISOString(),
+        };
+        await setUser(normalized, freshData);
+      } else if (!(await getUser(normalized))) {
         await createUser(normalized);
       }
       const token = await createSessionToken(normalized);
