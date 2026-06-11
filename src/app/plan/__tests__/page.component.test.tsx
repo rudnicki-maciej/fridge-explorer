@@ -157,12 +157,22 @@ describe("resetPlan", () => {
   });
 
   test(`success: options visible after fetch resolves`, async () => {
-    // given — verify clearPlan and updateSupplies called with restored values,
-    // and fetch was invoked for options
+    // given — stateful plan mock so clearPlan triggers re-render with plan=null
     const plan = buildPlan();
-    setupMocks(plan);
+    let currentPlan: DailyPlan | null = plan;
+    vi.mocked(useSettings).mockReturnValue({ settings: { dailyCalorieTarget: 2000, disallowList: [] }, updateSettings: vi.fn(), loaded: true });
+    vi.mocked(useSupplies).mockReturnValue({ supplies: suppliesAfterSetA, updateSupplies: mockUpdateSupplies, addItems: vi.fn(), removeItem: vi.fn(), updateItem: vi.fn(), loaded: true });
+    const clearPlanStateful = vi.fn(() => { currentPlan = null; });
+    vi.mocked(useDailyPlan).mockImplementation(() => ({
+      plan: currentPlan,
+      savePlan: mockSavePlan,
+      clearPlan: clearPlanStateful,
+      loaded: true,
+    }));
 
-    vi.mocked(global.fetch).mockResolvedValueOnce({
+    // mockResolvedValue (not Once) — handles both the resetPlan fetch and
+    // the useEffect that re-fires when plan becomes null
+    vi.mocked(global.fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ mealSets: [setB], snacks: [] }),
     } as Response);
@@ -172,11 +182,10 @@ describe("resetPlan", () => {
     // when — user clicks "Reset today's plan"
     await userEvent.click(screen.getByRole("button", { name: /reset today/i }));
 
-    // then — supplies restored and clearPlan called
+    // then — clearPlan called, supplies restored, options visible
+    expect(clearPlanStateful).toHaveBeenCalled();
     expect(mockUpdateSupplies).toHaveBeenCalledWith(baseSupplies);
-    expect(mockClearPlan).toHaveBeenCalled();
-    // fetch called with options=true to reload options after reset
-    await waitFor(() => expect(global.fetch).toHaveBeenCalledWith("/api/plan/today?options=true"));
+    await waitFor(() => expect(screen.getByText("Rice Bowl")).toBeInTheDocument());
   });
 
   test(`failure: error message visible after fetch rejects`, async () => {
