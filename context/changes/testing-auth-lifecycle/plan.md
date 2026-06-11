@@ -187,20 +187,20 @@ None — tests only, no production code changes.
 
 #### Automated
 
-- [x] 1.1 Tests pass: `npm test src/lib/__tests__/auth.test.ts`
-- [x] 1.2 Full suite passes: `npm test`
-- [x] 1.3 Type checking passes: `npm run build`
+- [x] 1.1 Tests pass: `npm test src/lib/__tests__/auth.test.ts` — 2ae52b3
+- [x] 1.2 Full suite passes: `npm test` — 2ae52b3
+- [x] 1.3 Type checking passes: `npm run build` — 2ae52b3
 
 ### Phase 2: E2E test — expired link recovery path
 
 #### Automated
 
-- [ ] 2.1 E2E test passes: `npx playwright test tests/auth-expired.spec.ts`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 E2E test passes: `npx playwright test tests/auth-expired.spec.ts`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Manually verify expired link redirect + error message in browser
+- [x] 2.3 Manually verify expired link redirect + error message in browser
 
 ### Phase 3: Document CI gates
 
