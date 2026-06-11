@@ -224,15 +224,15 @@ Test cases:
 
 #### Automated
 
-- [x] 1.1 Tests pass: `npm test src/lib/__tests__/compute-input-hash.test.ts`
-- [x] 1.2 Type checking passes: `npm run build`
+- [x] 1.1 Tests pass: `npm test src/lib/__tests__/compute-input-hash.test.ts` — 8ca0927
+- [x] 1.2 Type checking passes: `npm run build` — 8ca0927
 
 ### Phase 2: Integration test — plan persistence prevents LLM call
 
 #### Automated
 
-- [ ] 2.1 Tests pass: `npm test src/app/api/plan/today/__tests__/route.test.ts`
-- [ ] 2.2 Type checking passes: `npm run build`
+- [x] 2.1 Tests pass: `npm test src/app/api/plan/today/__tests__/route.test.ts`
+- [x] 2.2 Type checking passes: `npm run build`
 
 ### Phase 3: TDD — cron health signal
 
