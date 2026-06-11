@@ -196,18 +196,18 @@ Test `repickSet` (Risk #9) and `resetPlan` (Risk #10) as component integration t
 
 #### Automated
 
-- [x] 1.1 Dependencies install cleanly
-- [x] 1.2 Existing tests still pass
-- [x] 1.3 Trivial component test renders without error
+- [x] 1.1 Dependencies install cleanly — eaf7301
+- [x] 1.2 Existing tests still pass — eaf7301
+- [x] 1.3 Trivial component test renders without error — eaf7301
 
 ### Phase 2: Route Tests for Risk #8
 
 #### Automated
 
-- [ ] 2.1 Options-true match returns 200
-- [ ] 2.2 Options-true stale date returns 404
-- [ ] 2.3 Boundary evening (23:30 UTC) returns 200
-- [ ] 2.4 Boundary morning (00:30 UTC next day) returns 404
+- [x] 2.1 Options-true match returns 200
+- [x] 2.2 Options-true stale date returns 404
+- [x] 2.3 Boundary evening (23:30 UTC) returns 200
+- [x] 2.4 Boundary morning (00:30 UTC next day) returns 404
 
 ### Phase 3: Component Tests for Risks #9 and #10
 

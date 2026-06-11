@@ -106,3 +106,78 @@ describe("/api/plan/today", () => {
     );
   });
 });
+
+describe("/api/plan/today?options=true", () => {
+  const originalFetch = global.fetch;
+
+  beforeEach(() => {
+    vi.mocked(verifySession).mockResolvedValue("user@test.dev");
+    global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 500 }) as unknown as typeof fetch;
+    process.env.OPENAI_API_KEY = "test-key";
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    delete process.env.OPENAI_API_KEY;
+    vi.useRealTimers();
+    vi.resetAllMocks();
+  });
+
+  test(`returns 200 with mealSets when pregenerated date matches today`, async () => {
+    // given
+    const user = buildUser();
+    vi.mocked(getUser).mockResolvedValue(user);
+
+    // when
+    const response = await GET(new Request("http://localhost/api/plan/today?options=true"));
+    const body = await response.json();
+
+    // then
+    expect(response.status).toBe(200);
+    expect(body).toEqual({ mealSets, snacks, pregenerated: true });
+  });
+
+  test(`returns 404 when pregenerated date is yesterday`, async () => {
+    // given
+    const user = buildUser({ date: "2020-01-01" });
+    vi.mocked(getUser).mockResolvedValue(user);
+
+    // when
+    const response = await GET(new Request("http://localhost/api/plan/today?options=true"));
+    const body = await response.json();
+
+    // then
+    expect(response.status).toBe(404);
+    expect(body).toEqual({ error: "No options for today" });
+  });
+
+  test(`returns 200 at 23:30 UTC when pregenerated date matches UTC today`, async () => {
+    // given — server clock at 23:30 UTC on June 11 (UTC date is still "2026-06-11")
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-11T23:30:00.000Z"));
+    const user = buildUser({ date: "2026-06-11" });
+    vi.mocked(getUser).mockResolvedValue(user);
+
+    // when
+    const response = await GET(new Request("http://localhost/api/plan/today?options=true"));
+
+    // then
+    expect(response.status).toBe(200);
+  });
+
+  test(`returns 404 at 00:30 UTC next day when pregenerated date is yesterday`, async () => {
+    // given — server clock at 00:30 UTC on June 12 (UTC date is "2026-06-12")
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-12T00:30:00.000Z"));
+    const user = buildUser({ date: "2026-06-11" });
+    vi.mocked(getUser).mockResolvedValue(user);
+
+    // when
+    const response = await GET(new Request("http://localhost/api/plan/today?options=true"));
+    const body = await response.json();
+
+    // then
+    expect(response.status).toBe(404);
+    expect(body).toEqual({ error: "No options for today" });
+  });
+});
