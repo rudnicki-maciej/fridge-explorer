@@ -31,6 +31,9 @@ The top failure scenarios this project must protect against, ordered by risk = i
 | 5 | NL supply parser creates duplicate items from typos or near-synonyms instead of matching existing entries | Medium | High | Interview Q2 "typo treated as new product"; archive supply-management plan (LLM parsing); hot-spot dir `src/lib` (28 commits/30d) |
 | 6 | Cron pre-generation job fails silently — no plan available when user opens the app, triggering on-demand generation (cost + latency) | Medium | Medium | Interview Q3 "not sure cron runs properly"; archive observability plan (metrics exist but no cron-specific health signal) |
 | 7 | Auth session expires or magic-link token is reused, leaving the user locked out with no clear recovery path | Medium | Low | Archive email-magic-link-auth plan (single-use tokens, 15-min TTL, 30-day session); PRD Access Control |
+| 8 | Options bypass (`?options=true`) serves yesterday's stale options due to timezone mismatch in date comparison | High | Medium | Interview Q1 (refresh 2026-06-11); hot-spot dir `src/app/api/plan/today` (3 commits/30d) |
+| 9 | Re-pick deducts from already-deducted supplies (double-deduction) because restore is skipped or uses stale state | High | Medium | Interview Q3 (refresh 2026-06-11); archive plan-management; hot-spot dir `src/app/plan` (11 commits/30d) |
+| 10 | Reset restores supplies but fails to display original options — user lands on empty state with no feedback | Medium | Medium | Interview Q3 (refresh 2026-06-11); impl-review finding (resetPlan error path) |
 
 ### Risk Response Guidance
 
@@ -43,6 +46,9 @@ The top failure scenarios this project must protect against, ordered by risk = i
 | #5 | Adding a supply via NL text that is a near-synonym or typo of an existing item merges rather than creates a duplicate | "We pass existing items as context" — assumes LLM always uses the hint | Whether existing supply names are passed to parsing prompt; how response is reconciled with existing keys | Integration test (existing: "chicken breast"; input: "chiken breast" → merged) | Asserting the prompt includes the items list — template test, not merge-behavior test |
 | #6 | When cron runs and succeeds, a verifiable signal is written; when it fails, the failure is observable without opening the app | "Metrics exist, so we'll see it" — assumes current metrics cover cron specifically | Whether recordGeneration distinguishes cron from user; whether cron-specific success key exists | Unit test (signal write) + integration test (failed generation leaves observable trace) | Testing only that cron returns 200 — a 200 with no plan written is a silent failure |
 | #7 | An expired or reused magic-link token returns a clear error; user with expired session is redirected to login with recovery path | "We redirect to /login?error=expired" — assumes all failure modes land there | Token lifecycle (creation, single-use deletion, TTL); session cookie lifecycle; client behavior on 401 | Unit test (token verification) + lightweight e2e (expired token → error → re-request works) | Testing only the happy path (valid token → session) and calling auth "covered" |
+| #8 | `GET /api/plan/today?options=true` returns today's options correctly regardless of server timezone; returns 404 when stored date is yesterday | "JS Date gives consistent 'today'" — `toISOString().split('T')[0]` uses UTC, not local | How `today` is computed in route; whether cron stores date in UTC or local; timezone of comparison | Integration test (route handler with seeded dates, boundary cases) | Testing only the happy-path where dates obviously match |
+| #9 | After re-pick: net supply state equals "original supplies minus new set only" — old deduction fully reversed before new one applied | "restoreIngredients is unit-tested so the sequence works" — unit test doesn't prove composition | How supplies state flows through repickSet; stale closure risk; legacy plan guard | Unit test (round-trip: deduct A → restore A → deduct B === original − B) | Testing restore and deduct separately and calling the sequence "covered" |
+| #10 | After reset: supplies match pre-pick state AND options are displayed (or error shown if fetch fails) | "clearPlan + restoreIngredients = full reset" — misses async fetch and error path | How resetPlan sequences restore → clear → fetch; error feedback on failure | Integration test (route returns options after supply change) + unit test (restore sequence) | Testing only that clearPlan was called |
 
 ## 3. Phased Rollout
 
@@ -54,6 +60,7 @@ Each row is a discrete rollout phase that will open its own change folder via `/
 | 2 | Supply integrity | Prove supply state remains accurate after picks and NL additions | #3, #5 | unit + integration | complete | context/changes/testing-supply-integrity/ |
 | 3 | Plan persistence and cost control | Prove generated/picked plans are persisted and reused; cron failures are observable | #4, #6 | integration + unit | complete | context/changes/testing-plan-persistence/ |
 | 4 | Auth lifecycle and quality gates | Prove token expiry/reuse handling; wire CI gates to lock the floor | #7 | unit + e2e-light + CI gates | complete | context/changes/testing-auth-lifecycle/ |
+| 5 | Plan-management coverage | Prove options-bypass date logic, undo→re-deduct sequence, and reset+fetch behavior | #8, #9, #10 | integration + unit | change opened | context/changes/testing-plan-management-coverage/ |
 
 ## 4. Stack
 
@@ -284,8 +291,8 @@ Exclusions agreed during the rollout. Future contributors should respect these u
 
 ## 8. Freshness Ledger
 
-- Strategy (§1–§5) last reviewed: 2026-06-02
-- Stack versions last verified: 2026-06-02
+- Strategy (§1–§5) last reviewed: 2026-06-11
+- Stack versions last verified: 2026-06-11
 - AI-native tool references last verified: 2026-06-02
 
 Refresh (`/10x-test-plan --refresh`) when:
