@@ -3,7 +3,7 @@ import { verifySession } from "@/lib/auth";
 import { getUser, setUser } from "@/lib/kv";
 import { generateMealPlan, computeInputHash } from "@/lib/generate";
 
-export async function GET() {
+export async function GET(request: Request) {
   const userId = await verifySession();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,6 +15,20 @@ export async function GET() {
   }
 
   const today = new Date().toISOString().split("T")[0];
+
+  // Bypass hash check — return stored options for re-pick flow
+  const { searchParams } = new URL(request.url);
+  if (searchParams.get("options") === "true") {
+    if (user.pregenerated && user.pregenerated.date === today) {
+      return NextResponse.json({
+        mealSets: user.pregenerated.mealSets,
+        snacks: user.pregenerated.snacks,
+        pregenerated: true,
+      });
+    }
+    return NextResponse.json({ error: "No options for today" }, { status: 404 });
+  }
+
   const currentHash = computeInputHash(user.settings, user.supplies);
 
   // Return pre-generated plan if valid

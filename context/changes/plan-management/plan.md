@@ -241,16 +241,16 @@ Add "Try different options" when browsing, and make "Reset today's plan" undo th
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `npm test src/lib/__tests__/supply-math.test.ts`
-- [x] 1.2 Full suite passes: `npm test`
-- [x] 1.3 Type checking passes: `npm run build`
+- [x] 1.1 Unit tests pass: `npm test src/lib/__tests__/supply-math.test.ts` — 4383347
+- [x] 1.2 Full suite passes: `npm test` — 4383347
+- [x] 1.3 Type checking passes: `npm run build` — 4383347
 
 ### Phase 2: API — options retrieval bypass
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Type checking passes: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
