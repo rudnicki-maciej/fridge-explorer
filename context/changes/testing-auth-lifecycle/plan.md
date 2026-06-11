@@ -206,8 +206,8 @@ None — tests only, no production code changes.
 
 #### Automated
 
-- [x] 3.1 test-plan.md updated with Phase 4 status and CI gate commands
+- [x] 3.1 test-plan.md updated with Phase 4 status and CI gate commands — 93d5314
 
 #### Manual
 
-- [x] 3.2 Review updated test-plan.md for accuracy
+- [x] 3.2 Review updated test-plan.md for accuracy — 93d5314
