@@ -1,7 +1,7 @@
 ---
 change_id: testing-plan-management-coverage
 title: Plan-management test coverage for Phase 5 risks 8–10
-status: implementing
+status: implemented
 created: 2026-06-11
 updated: 2026-06-11
 archived_at: null

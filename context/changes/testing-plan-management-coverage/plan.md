@@ -204,16 +204,16 @@ Test `repickSet` (Risk #9) and `resetPlan` (Risk #10) as component integration t
 
 #### Automated
 
-- [x] 2.1 Options-true match returns 200
-- [x] 2.2 Options-true stale date returns 404
-- [x] 2.3 Boundary evening (23:30 UTC) returns 200
-- [x] 2.4 Boundary morning (00:30 UTC next day) returns 404
+- [x] 2.1 Options-true match returns 200 — 7dbdcb9
+- [x] 2.2 Options-true stale date returns 404 — 7dbdcb9
+- [x] 2.3 Boundary evening (23:30 UTC) returns 200 — 7dbdcb9
+- [x] 2.4 Boundary morning (00:30 UTC next day) returns 404 — 7dbdcb9
 
 ### Phase 3: Component Tests for Risks #9 and #10
 
 #### Automated
 
-- [ ] 3.1 Repick yields original minus new set only
-- [ ] 3.2 Repick guard path (empty deductedIngredients) deducts from raw supplies
-- [ ] 3.3 Reset success: options visible after fetch
-- [ ] 3.4 Reset failure: error message visible after fetch rejects
+- [x] 3.1 Repick yields original minus new set only
+- [x] 3.2 Repick guard path (empty deductedIngredients) deducts from raw supplies
+- [x] 3.3 Reset success: options visible after fetch
+- [x] 3.4 Reset failure: error message visible after fetch rejects
