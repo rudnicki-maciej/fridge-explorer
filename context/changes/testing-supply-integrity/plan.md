@@ -215,8 +215,8 @@ Mock setup: `makeOpenAIResponse({items: [...]})` helper (reuse pattern from `gen
 
 #### Automated
 
-- [x] 2.1 All tests pass: `npm test`
-- [x] 2.2 No type errors: `npm run build`
+- [x] 2.1 All tests pass: `npm test` — b8bc1e2
+- [x] 2.2 No type errors: `npm run build` — b8bc1e2
 
 ### Phase 3: Integration tests for NL dedup pipeline
 
