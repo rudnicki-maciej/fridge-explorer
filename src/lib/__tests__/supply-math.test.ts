@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { deductIngredients, mergeItems } from "@/lib/supply-math";
+import { deductIngredients, mergeItems, restoreIngredients } from "@/lib/supply-math";
 import type { Supplies, Ingredient } from "@/types";
 
 describe("deductIngredients", () => {
@@ -124,5 +124,66 @@ describe("mergeItems", () => {
       milk: { amount: 750, unit: "ml" },
       rice: { amount: 200, unit: "g" },
     });
+  });
+});
+
+describe("restoreIngredients", () => {
+  test(`adds amounts back to existing supply entries`, () => {
+    const supplies: Supplies = {
+      chicken: { amount: 300, unit: "g" },
+      rice: { amount: 200, unit: "g" },
+    };
+    const ingredients: Ingredient[] = [
+      { name: "chicken", amount: 200, unit: "g" },
+      { name: "rice", amount: 100, unit: "g" },
+    ];
+
+    const result = restoreIngredients(supplies, ingredients);
+
+    expect(result).toEqual({
+      chicken: { amount: 500, unit: "g" },
+      rice: { amount: 300, unit: "g" },
+    });
+  });
+
+  test(`re-creates supply entry that was previously deleted`, () => {
+    const supplies: Supplies = {
+      chicken: { amount: 300, unit: "g" },
+    };
+    const ingredients: Ingredient[] = [{ name: "milk", amount: 250, unit: "ml" }];
+
+    const result = restoreIngredients(supplies, ingredients);
+
+    expect(result).toEqual({
+      chicken: { amount: 300, unit: "g" },
+      milk: { amount: 250, unit: "ml" },
+    });
+  });
+
+  test(`returns unchanged supplies when ingredients list is empty`, () => {
+    const supplies: Supplies = {
+      chicken: { amount: 300, unit: "g" },
+    };
+
+    const result = restoreIngredients(supplies, []);
+
+    expect(result).toEqual({ chicken: { amount: 300, unit: "g" } });
+  });
+
+  test(`round-trips with deductIngredients to produce original supplies`, () => {
+    const original: Supplies = {
+      chicken: { amount: 500, unit: "g" },
+      rice: { amount: 300, unit: "g" },
+      milk: { amount: 250, unit: "ml" },
+    };
+    const ingredients: Ingredient[] = [
+      { name: "chicken", amount: 200, unit: "g" },
+      { name: "milk", amount: 250, unit: "ml" },
+    ];
+
+    const afterDeduct = deductIngredients(original, ingredients);
+    const restored = restoreIngredients(afterDeduct, ingredients);
+
+    expect(restored).toEqual(original);
   });
 });

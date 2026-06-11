@@ -40,6 +40,7 @@ export interface DailyPlan {
   date: string;
   chosenSetId: string;
   mealSet: MealSet;
+  deductedIngredients: Ingredient[];
 }
 
 export interface Snack {
