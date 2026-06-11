@@ -66,7 +66,8 @@ Respond ONLY with valid JSON: { "items": [{ "name": "...", "amount": 100, "unit"
     }));
 
     return validated.length > 0 ? validated : null;
-  } catch {
+  } catch (err) {
+    console.warn("[supplies-parser] parse failed:", err);
     return null;
   }
 }

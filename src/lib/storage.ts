@@ -93,7 +93,7 @@ export function useSettings() {
           setItem(KEYS.settings, data);
         }
       })
-      .catch(() => {})
+      .catch((err) => console.warn("[storage] hydration failed:", err))
       .finally(() => setHydrated(true));
   }, []);
 
@@ -126,7 +126,7 @@ export function useSupplies() {
           setItem(KEYS.supplies, data);
         }
       })
-      .catch(() => {})
+      .catch((err) => console.warn("[storage] hydration failed:", err))
       .finally(() => setHydrated(true));
   }, []);
 
@@ -215,7 +215,7 @@ export function useSnacks() {
           setItem(KEYS.snacks, data.snacks);
         }
       })
-      .catch(() => {})
+      .catch((err) => console.warn("[storage] hydration failed:", err))
       .finally(() => setHydrated(true));
   }, []);
 

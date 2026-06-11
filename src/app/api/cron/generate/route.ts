@@ -50,7 +50,8 @@ export async function POST(request: Request) {
         } else {
           failed++;
         }
-      } catch {
+      } catch (err) {
+        console.error("[cron/generate] user generation failed:", err);
         failed++;
       }
     }));

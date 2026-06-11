@@ -123,7 +123,7 @@ Respond ONLY with valid JSON matching this schema:
       recordGeneration(email, latencyMs, {
         prompt: data.usage?.prompt_tokens ?? 0,
         completion: data.usage?.completion_tokens ?? 0,
-      }).catch(() => {});
+      }).catch((err) => console.warn("[generate] recordGeneration failed:", err));
     }
 
     return parsed.snacks;
@@ -226,7 +226,7 @@ Respond ONLY with valid JSON matching this schema:
       recordGeneration(email, latencyMs, {
         prompt: data.usage?.prompt_tokens ?? 0,
         completion: data.usage?.completion_tokens ?? 0,
-      }).catch(() => {});
+      }).catch((err) => console.warn("[generate] recordGeneration failed:", err));
     }
 
     return parsed;
